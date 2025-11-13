@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BizGoAI - The AI Community for Small Business</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Inter Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .hero-bg {
+            background: linear-gradient(120deg, #F9FAFB 60%, #EFF6FF 100%);
+        }
+        
+        /* Single-row left-to-right marquee (one row only) */
+        .marquee-row {
+            display: flex;
+            gap: 1.5rem;
+            align-items: stretch;
+            animation: marquee-ltr 36s linear infinite;
+        }
+
+        .marquee-row:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes marquee-ltr {
+            0% {
+                transform: translateX(-50%);
+            }
+            100% {
+                transform: translateX(0%);
+            }
+        }
+
+        .chaos-card {
+            flex-shrink: 0;
+            width: 420px;
+            background: white;
+            border: 1px solid rgba(226,232,240,0.9); /* slate-200 */
+            border-radius: 1rem;
+            padding: 1.25rem 1.5rem;
+            box-shadow: 0 6px 18px rgba(2,6,23,0.06);
+            transition: transform .28s cubic-bezier(.2,.9,.3,1), box-shadow .28s;
+        }
+
+        .chaos-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 18px 36px rgba(2,6,23,0.12);
+            border-color: rgba(203,213,225,1);
+        }
+    </style>
+</head>
+<body class="bg-white text-slate-900 antialiased">
+
+    <!-- Header -->
+    <header class="absolute top-0 left-0 w-full z-10 py-6 px-4 sm:px-6 lg:px-8">
+        <nav class="flex items-center justify-between">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <svg class="h-10 w-10 text-blue-600" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <!-- CHANGED: text-gray-900 to text-slate-900 -->
+                    <span class="text-2xl font-bold text-slate-900">BizGoAI</span>
+                </div>
+            </div>
+            <div class="hidden sm:block">
+                <!-- CHANGED: text-gray-600 to text-slate-600 -->
+                <a href="#vendor-info" class="text-sm font-medium text-slate-600 hover:text-slate-900">Are you a Vendor?</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+
+        <!-- Hero Section -->
+        <div class="relative hero-bg overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="relative pt-24 pb-16 sm:pt-32 sm:pb-24 lg:grid lg:grid-cols-12 lg:gap-8">
+                    
+                    <!-- Left Column (Content) -->
+                    <div class="lg:col-span-6 flex flex-col justify-center z-10">
+                        <!-- CHANGED: text-gray-900 to text-slate-900 -->
+                        <h1 class="text-3xl font-bold tracking-tight text-[#0b2e7b] sm:text-4xl md:text-5xl lg:text-6xl">
+                            Stop the AI Overwhelm.
+                            <span class="block text-blue-600">Start Growing Together.</span>
+                        </h1>
+                        <!-- CHANGED: text-gray-600 to text-slate-700 -->
+                        <p class="mt-6 text-base text-slate-700 sm:text-lg lg:text-xl max-w-lg">
+                            BizGoAI is the *only* community for small businesses to find trusted, peer-verified AI tools. No hype. Just real results from peers you can trust.
+                        </p>
+                        <div class="mt-10">
+                            <a href="#signup-form" class="inline-flex items-center justify-center px-8 py-3 border border-transparent rounded-lg shadow-sm text-lg font-medium text-white bg-amber-500 hover:bg-amber-600 sm:w-auto">
+                                Become a Founding Member
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Right Column ("Fan of Cards" Visual) -->
+                    <div class="hidden lg:block lg:col-span-6 mt-12 lg:mt-0" aria-hidden="true">
+                        <div class="relative h-full flex items-center justify-center">
+                            
+                            <div class="w-full max-w-lg relative" style="transform: rotate(-3deg);">
+                                <!-- Card 3 (Back) - Apex Solutions -->
+                                <div class="bg-white rounded-xl shadow-lg p-4 relative z-0 transform -rotate-12 -translate-x-12 translate-y-12 opacity-80">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center overflow-hidden border border-slate-200">
+                                                <svg class="h-6 w-6 text-slate-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M3 20h18L12 4L3 20z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    <path d="M12 4L8 20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    <path d="M12 4L16 20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                </svg>
+                                            </div>
+                                            <!-- CHANGED: text-gray-900 to text-slate-900 -->
+                                            <h4 class="text-sm font-bold text-[#0b2e7b]">Apex Solutions</h4>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <svg class="h-4 w-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 15.172l-4.94 2.598 1.18-5.81-4.24-4.132 5.82-.84L10 2l2.62 5.088 5.82.84-4.24 4.132 1.18 5.81z" /></svg>
+                                            <span class="text-xs font-bold ml-1 text-slate-900">5.0</span>
+                                        </div>
+                                    </div>
+                                    <!-- CHANGED: text-gray-600 to text-slate-700 -->
+                                    <p class="mt-2 text-sm text-slate-700">"Finally, a tool that just works. Saved me hours on scheduling."</p>
+                                </div>
+                                
+                                <!-- Card 2 (Middle) - Acme Design Co. -->
+                                <div class="bg-white rounded-xl shadow-lg p-4 relative z-10 transform rotate-6 -translate-y-4 opacity-95">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center overflow-hidden border border-slate-200">
+                                                <svg class="h-6 w-6 text-slate-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                                                    <path d="M12 18L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                                    <path d="M16 14L8 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                                </svg>
+                                            </div>
+                                            <!-- CHANGED: text-gray-900 to text-slate-900 -->
+                                            <h4 class="text-sm font-bold text-[#0b2e7b]">Acme Design Co.</h4>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <svg class="h-4 w-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 15.172l-4.94 2.598 1.18-5.81-4.24-4.132 5.82-.84L10 2l2.62 5.088 5.82.84-4.24 4.132 1.18 5.81z" /></svg>
+                                            <!-- CHANGED: text-gray-900 to text-slate-900 -->
+                                            <span class="text-xs font-bold ml-1 text-slate-900">4.8</span>
+                                        </div>
+                                    </div>
+                                    <!-- CHANGED: text-gray-600 to text-slate-700 -->
+                                    <p class="mt-2 text-sm text-slate-700">"Great for project management. The peer reviews here were spot on."</p>
+                                </div>
+
+                                <!-- Card 1 (Front) - Main St. Roasters -->
+                                <div class="bg-white rounded-xl shadow-2xl p-6 relative z-20 transform -rotate-3 -translate-y-16 border-2 border-blue-600">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center overflow-hidden border border-slate-200">
+                                                <svg class="h-6 w-6 text-slate-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M8 10V8c0-2.21 1.79-4 4-4s4 1.79 4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    <path d="M16 10H8c-3.31 0-6 2.69-6 6v0c0 3.31 2.69 6 6 6h8c3.31 0 6-2.69 6-6v0c0-3.31-2.69-6-6-6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    <path d="M12 15c-1.1 0-2 .9-2 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <!-- CHANGED: text-gray-900 to text-slate-900 -->
+                                                <h3 class="text-lg font-bold text-[#0b2e7b]">Main St. Roasters</h3>
+                                                <!-- CHANGED: text-gray-500 to text-slate-500 -->
+                                                <p class="text-sm text-slate-500">Sales & CRM</p>
+                                            </div>
+                                        </div>
+                                        <span class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-amber-100 text-amber-800">
+                                            BizgoAI top member
+                                        </span>
+                                    </div>
+                                    <!-- CHANGED: text-gray-700 to text-slate-700 -->
+                                    <p class="mt-4 text-slate-700">"This tool saved us 10+ hours a week. It actually does what it promises, and setup was a breeze for our non-technical team."</p>
+                                    <!-- CHANGED: border-gray-200 to border-slate-200 -->
+                                    <div class="mt-4 pt-4 border-t border-slate-200">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center space-x-2">
+                                                <svg class="h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20"><path d="M10 10a5 5 0 005-5V4a3 3 0 00-3-3H8a3 3 0 00-3 3v1a5 5 0 005 5z" /><path d="M18 11a1 1 0 00-1 1v1a1 1 0 01-1 1H4a1 1 0 01-1-1v-1a1 1 0 00-2 0v1a3 3 0 003 3h12a3 3 0 003-3v-1a1 1 0 00-1-1z" /></svg>
+                                                <span class="text-sm font-medium text-blue-600">Verified by 12 SMBs</span>
+                                            </div>
+                                            <div class="flex items-center space-x-1">
+                                                <svg class="h-5 w-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 15.172l-4.94 2.598 1.18-5.81-4.24-4.132 5.82-.84L10 2l2.62 5.088 5.82.84-4.24 4.132 1.18 5.81z" /></svg>
+                                                <!-- CHANGED: text-gray-900 to text-slate-900 -->
+                                                <span class="text-sm font-bold text-slate-900">4.9</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- "Problem" Section -->
+        <section class="py-16 sm:py-24 bg-white overflow-hidden">
+            <div class="max-w-3xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+                <!-- CHANGED: text-gray-900 to text-slate-900 -->
+                <h2 class="text-3xl font-bold tracking-tight text-[#0b2e7b] sm:text-4xl">
+                    Small Businesses are Drowning in AI Solutions Chaos
+                </h2>
+                <!-- CHANGED: text-gray-600 to text-slate-700 -->
+                <p class="mt-6 text-xl text-slate-700">
+                    Increasing pressure to adopt AI and rapid tech changes. No time, budget, or expertise to do it right. You're buried in vendor hype, struggling to find solutions that actually work.
+                </p>
+            </div>
+            
+            <!-- Chaos Marquee (single row, left-to-right) -->
+            <div class="mt-16 w-full overflow-hidden" aria-hidden="false">
+                <div class="marquee-row" style="width:200%;">
+                    <!-- original set -->
+                    <div class="chaos-card mx-4">
+                        <p class="text-lg font-medium text-slate-700">"AI is everywhere now. Where do I even begin?"</p>
+                    </div>
+                    <div class="chaos-card mx-4">
+                        <p class="text-lg font-medium text-slate-700">"I’m worried I’ll waste money on AI tools that don’t fit what we need."</p>
+                    </div>
+                    <div class="chaos-card mx-4">
+                        <p class="text-lg font-medium text-slate-700">"I just spent a week integrating a tool and it didn't even work."</p>
+                    </div>
+                    <div class="chaos-card mx-4">
+                        <p class="text-lg font-medium text-slate-700">"I can't tell which of these reviews are fake."</p>
+                    </div>
+                    <div class="chaos-card mx-4">
+                        <p class="text-lg font-medium text-slate-700">"My competitor is using AI... I feel like I'm falling behind."</p>
+                    </div>
+                    <!-- duplicate set for seamless loop -->
+                    <div class="chaos-card mx-4" aria-hidden="true">
+                        <p class="text-lg font-medium text-slate-700">"AI is everywhere now. Where do I even begin?"</p>
+                    </div>
+                    <div class="chaos-card mx-4" aria-hidden="true">
+                        <p class="text-lg font-medium text-slate-700">"I’m worried I’ll waste money on AI tools that don’t fit what we need."</p>
+                    </div>
+                    <div class="chaos-card mx-4" aria-hidden="true">
+                        <p class="text-lg font-medium text-slate-700">"I just spent a week integrating a tool and it didn't even work."</p>
+                    </div>
+                    <div class="chaos-card mx-4" aria-hidden="true">
+                        <p class="text-lg font-medium text-slate-700">"I can't tell which of these reviews are fake."</p>
+                    </div>
+                    <div class="chaos-card mx-4" aria-hidden="true">
+                        <p class="text-lg font-medium text-slate-700">"My competitor is using AI... I feel like I'm falling behind."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- "Solution" Section -->
+        <!-- CHANGED: bg-gray-50 to bg-slate-50 -->
+        <section class="py-16 sm:py-24 bg-slate-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <!-- CHANGED: text-gray-900 to text-slate-900 -->
+                    <h2 class="text-3xl font-bold tracking-tight text-[#0b2e7b] sm:text-4xl">
+                        BizGoAI Fixes This
+                    </h2>
+                </div>
+
+                <!-- 6-Card Grid with Thematic Colors -->
+                <div class="mt-20 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+
+                    <!-- 1. Small biz first (PRODUCT = BLUE) -->
+                    <div class="bg-white p-8 rounded-2xl shadow-lg">
+                        <div class="flex items-center justify-center h-14 w-14 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg">
+                            <i data-lucide="target" class="w-8 h-8 text-white"></i>
+                        </div>
+                        <!-- CHANGED: text-slate-900 -->
+                        <h3 class="mt-6 text-xl font-bold text-[#0b2e7b]">Small biz first (1-100)</h3>
+                        <!-- CHANGED: text-slate-700 -->
+                        <p class="mt-3 text-slate-700">A system designed specifically for the real needs, scale, and budget of small businesses.</p>
+                    </div>
+
+                    <!-- 2. Top AI Solutions (PRODUCT = BLUE) -->
+                    <div class="bg-white p-8 rounded-2xl shadow-lg">
+                        <div class="flex items-center justify-center h-14 w-14 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg">
+                            <i data-lucide="star" class="w-8 h-8 text-white"></i>
+                        </div>
+                        <!-- CHANGED: text-slate-900 -->
+                        <h3 class="mt-6 text-xl font-bold text-[#0b2e7b]">Top AI Solutions</h3>
+                        <!-- CHANGED: text-slate-700 -->
+                        <p class="mt-3 text-slate-700">Discover trusted, high-quality AI tools curated to meet your unique business challenges.</p>
+                    </div>
+                    
+                    <!-- 3. Real Feedback (COMMUNITY = AMBER) -->
+                    <div class="bg-white p-8 rounded-2xl shadow-lg">
+                        <div class="flex items-center justify-center h-14 w-14 rounded-xl bg-gradient-to-br from-amber-400 to-amber-500 shadow-lg">
+                            <i data-lucide="shield-check" class="w-8 h-8 text-white"></i>
+                        </div>
+                        <!-- CHANGED: text-slate-900 -->
+                        <h3 class="mt-6 text-xl font-bold text-[#0b2e7b]">Real Feedback from s-biz Like Yours</h3>
+                        <!-- CHANGED: text-slate-700 -->
+                        <p class="mt-3 text-slate-700">Learn from honest reviews and insights from verified small business owners, not sponsored posts.</p>
+                    </div>
+
+                    <!-- 4. Strong Networking (COMMUNITY = AMBER) -->
+                    <div class="bg-white p-8 rounded-2xl shadow-lg">
+                        <div class="flex items-center justify-center h-14 w-14 rounded-xl bg-gradient-to-br from-amber-400 to-amber-500 shadow-lg">
+                            <i data-lucide="users" class="w-8 h-8 text-white"></i>
+                        </div>
+                        <!-- CHANGED: text-slate-900 -->
+                        <h3 class="mt-6 text-xl font-bold text-[#0b2e7b]">Strong Networking & Community</h3>
+                        <!-- CHANGED: text-slate-700 -->
+                        <p class="mt-3 text-slate-700">Connect with peers, share experiences, and grow together in a collaborative environment.</p>
+                    </div>
+
+                    <!-- 5. Open Communication (COMMUNITY = AMBER) -->
+                    <div class="bg-white p-8 rounded-2xl shadow-lg">
+                        <div class="flex items-center justify-center h-14 w-14 rounded-xl bg-gradient-to-br from-amber-400 to-amber-500 shadow-lg">
+                            <i data-lucide="lightbulb" class="w-8 h-8 text-white"></i>
+                        </div>
+                        <!-- CHANGED: text-slate-900 -->
+                        <h3 class="mt-6 text-xl font-bold text-[#0b2e7b]">Open, Transparent Communication</h3>
+                        <!-- CHANGED: text-slate-700 -->
+                        <p class="mt-3 text-slate-700">Engage with tool creators who value your feedback and success. Your voice matters here.</p>
+                    </div>
+                    
+                    <!-- 6. User-Friendly Search (PRODUCT = BLUE) -->
+                    <div class="bg-white p-8 rounded-2xl shadow-lg">
+                        <div class="flex items-center justify-center h-14 w-14 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg">
+                            <i data-lucide="search" class="w-8 h-8 text-white"></i>
+                        </div>
+                        <!-- CHANGED: text-slate-900 -->
+                        <h3 class="mt-6 text-xl font-bold text-[#0b2e7b]">User-Friendly, Simple Search</h3>
+                        <!-- CHANGED: text-slate-700 -->
+                        <p class="mt-3 text-slate-700">Find solutions tailored to your industry, budget, and needs with a simple, guided search. No more noise.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Secondary Section (For Vendors) - De-emphasized -->
+        <section id="vendor-info" class="py-16 sm:py-24 bg-white">
+            <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+                <!-- CHANGED: text-gray-900 to text-slate-900 -->
+                <h2 class="text-2xl font-bold tracking-tight text-[#0b2e7b] sm:text-3xl">
+                    Are You an AI Vendor?
+                </h2>
+                <!-- CHANGED: text-gray-600 to text-slate-700 -->
+                <p class="mt-4 text-lg text-slate-700">
+                    We're building a community of qualified, high-intent SMBs first. If you build a great product and value honest feedback, join the waitlist. We'll be in touch.
+                </p>
+                <!-- CHANGED: text-gray-700, bg-gray-50, hover:bg-gray-100 -->
+                <a href="#signup-form"
+                    class="mt-8 w-full inline-flex items-center justify-center px-6 py-3 border border-slate-300 rounded-lg shadow-sm text-base font-medium text-slate-700 bg-slate-50 hover:bg-slate-100 sm:w-auto">
+                    Join as a Vendor
+                </a>
+            </div>
+        </section>
+
+        <!-- Final CTA & Form Section -->
+        <section id="signup-form" class="bg-blue-600">
+            <div class="max-w-3xl mx-auto text-center py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-bold text-white sm:text-4xl">
+                    <span class="block">Ready to change how small business does AI?</span>
+                </h2>
+                <p class="mt-4 text-lg leading-6 text-blue-100">
+                    Sign up to secure your spot as a founding member.
+                </p>
+                
+                <!-- Form Card -->
+                <div id="waitlist-card" class="w-full bg-white rounded-xl shadow-2xl p-6 sm:p-10 mt-12 text-left">
+                    <form id="waitlist-form" class="space-y-5">
+                        <div>
+                            <!-- CHANGED: text-gray-700 to text-slate-700 -->
+                            <label for="email" class="block text-sm font-medium text-slate-700">Email Address</label>
+                            <!-- CHANGED: border-gray-300, focus rings -->
+                            <input type="email" name="email" id="email" required
+                                class="mt-1 block w-full px-4 py-3 border border-slate-300 rounded-lg shadow-sm focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm"
+                                placeholder="you@company.com">
+                        </div>
+                        <div>
+                            <!-- CHANGED: text-gray-700 to text-slate-700 -->
+                            <label for="role" class="block text-sm font-medium text-slate-700">I am a...</label>
+                            <!-- CHANGED: border-gray-300, focus rings -->
+                            <select id="role" name="role" required
+                                class="mt-1 block w-full pl-3 pr-10 px-4 py-3 text-base border border-slate-300 focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm rounded-lg">
+                                <option value="smb_buyer" selected>Small Business / AI Buyer</option>
+                                <option value="ai_vendor">AI Vendor / Creator</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div id="form-message" class="text-sm"></div>
+
+                        <div>
+                            <button type="submit" id="submit-button"
+                                class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-lg font-medium text-white bg-amber-500 hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-colors duration-200">
+                                Get My Invite
+                            </button>
+                        </div>
+                        <!-- CHANGED: text-gray-500 to text-slate-500 -->
+                        <p class="text-xs text-slate-500 text-center">
+                            Be the first. Become a founding member. No spam, ever.
+                        </p>
+                    </form>
+                    
+                    <!-- Success Message -->
+                    <div id="success-message" class="hidden text-center py-4">
+                        <svg class="mx-auto h-12 w-12 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <!-- CHANGED: text-gray-900 to text-slate-900 -->
+                        <h3 class="mt-4 text-2xl font-bold text-[#0b2e7b]">You're a founding member!</h3>
+                        <!-- CHANGED: text-gray-600 to text-slate-700 -->
+                        <p class="mt-3 text-slate-700">Welcome to the BizGoAI small business community. Check your inbox for your welcome email.</p>
+                        <p class="mt-2 text-slate-700">Thank you for trusting us. We'll keep you posted on exclusive updates, launch dates, and member perks.</p>
+                        
+                        <!-- CHANGED: bg-gray-50 to bg-slate-50 -->
+                        <div class="mt-8 text-center bg-slate-50 p-6 rounded-lg">
+                            <span class="text-sm font-semibold text-amber-600 uppercase tracking-wider">FOUNDING MEMBER</span>
+                            <!-- CHANGED: text-gray-900 to text-slate-900 -->
+                            <p class="mt-2 text-base font-medium text-slate-900">We are building a strong SMBs community. Share BizGoAI with other small businesses who'd benefit.</p>
+                            
+                            <div class="flex items-center justify-center space-x-4 mt-4">
+                                <!-- CHANGED: text-gray-400 to text-slate-400, hover:text-slate-500 -->
+                                <a href="https://twitter.com/intent/tweet?text=I%27m%20on%20the%20waitlist%20for%20BizGoAI%2C%20a%20new%20community%20for%20SMBs%20to%20find%20trusted%20AI%20tools.%20Join%20me%3A&url=https%3A%2F%2Fwww.BizgoAI.com" target="_blank" class="text-slate-400 hover:text-slate-500">
+                                    <span class="sr-only">Twitter</span>
+                                    <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.71v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
+                                    </svg>
+                                </a>
+                                <!-- CHANGED: text-gray-400 to text-slate-400, hover:text-slate-500 -->
+                                <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fwww.BizgoAI.com" target="_blank" class="text-slate-400 hover:text-slate-500">
+                                    <span class="sr-only">LinkedIn</span>
+                                    <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <!-- CHANGED: text-gray-700 to text-slate-700 -->
+                            <p class="mt-4 text-sm text-slate-700">www.BizgoAI.com</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <!-- CHANGED: text-gray-400 to text-slate-400, etc. -->
+    <footer class="bg-slate-900 text-slate-400">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="flex items-center space-x-6 mb-6 md:mb-0">
+                    <span class="text-3xl font-bold text-white">
+                        <span class="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">BizGoAI</span>
+                    </span>
+                    <a href="https://www.linkedin.com" target="_blank" class="text-slate-400 hover:text-white">
+                        <span class="sr-only">LinkedIn</span>
+                        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                        </svg>
+                    </a>
+                    <a href="https://www.twitter.com" target="_blank" class="text-slate-400 hover:text-white">
+                        <span class="sr-only">Twitter</span>
+                        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.71v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
+                        </svg>
+                    </a>
+                    <a href="mailto:contact@bizgoai.com" class="text-slate-400 hover:text-white flex items-center">
+                        <svg class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                        contact@bizgoai.com
+                    </a>
+                </div>
+            </div>
+            <!-- CHANGED: border-gray-700, text-gray-500 -->
+            <div class="mt-8 border-t border-slate-700 pt-8 text-center">
+                <p class="text-base text-slate-500">&copy; 2025 BizGoAI. Built for small businesses, by small business advocates.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize Lucide icons
+            lucide.createIcons();
+            
+            const form = document.getElementById('waitlist-form');
+            const button = document.getElementById('submit-button');
+            const formMessage = document.getElementById('form-message');
+            
+            const waitlistCard = document.getElementById('waitlist-card');
+            const successMessage = document.getElementById('success-message');
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                formMessage.textContent = '';
+                formMessage.className = 'text-sm';
+
+                const emailInput = document.getElementById('email');
+                const roleSelect = document.getElementById('role');
+                const email = emailInput.value;
+                const role = roleSelect.value;
+
+                if (!email || !validateEmail(email)) {
+                    formMessage.textContent = 'Please enter a valid email address.';
+                    formMessage.classList.add('text-red-600');
+                    emailInput.focus();
+                    return;
+                }
+
+                if (!role) {
+                    formMessage.textContent = 'Please select your role.';
+                    formMessage.classList.add('text-red-600');
+                    roleSelect.focus();
+                    return;
+                }
+                
+                button.disabled = true;
+                button.textContent = 'Submitting...';
+                button.classList.add('opacity-75', 'cursor-not-allowed');
+
+                setTimeout(() => {
+                    form.classList.add('hidden');
+                    successMessage.classList.remove('hidden');
+                    if(waitlistCard) {
+                        waitlistCard.style.height = `${waitlistCard.offsetHeight}px`;
+                    }
+                }, 1500);
+            });
+
+            function validateEmail(email) {
+                const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                return re.test(String(email).toLowerCase());
+            }
+        });
+    </script>
+
+</body>
+</html>
