@@ -4,40 +4,7 @@
  * Filepath: netlify/functions/submission-created.js
  */
 
-// We will wrap EVERYTHING in a try/catch, even the 'require'
-let Resend;
-try {
-  Resend = require('resend').Resend;
-} catch (e) {
-  console.error("CRITICAL: Failed to 'require' Resend. 'resend' is not installed.", e);
-  return {
-    statusCode: 500,
-    body: JSON.stringify({ error: "Function dependency failure." }),
-  };
-}
-
-// Get your secret API key
-const apiKey = process.env.RESEND_API_KEY;
-if (!apiKey) {
-  console.error("CRITICAL: RESEND_API_KEY is missing or undefined.");
-  return {
-    statusCode: 500,
-    body: JSON.stringify({ error: "API Key is missing." }),
-  };
-}
-
-// Initialize Resend
-let resend;
-try {
-  resend = new Resend(apiKey);
-} catch (e) {
-  console.error("CRITICAL: Failed to initialize 'new Resend(apiKey)'. API key is likely invalid.", e);
-  return {
-    statusCode: 500,
-    body: JSON.stringify({ error: "Resend initialization failed." }),
-  };
-}
-
+const { Resend } = require('resend');
 
 // This is the main function that Netlify will run
 exports.handler = async (event) => {
@@ -45,16 +12,30 @@ exports.handler = async (event) => {
   console.log("Function 'submission-created' has started.");
 
   try {
+    // Get your secret API key
+    const apiKey = process.env.RESEND_API_KEY;
+    if (!apiKey) {
+      console.error("CRITICAL: RESEND_API_KEY is missing or undefined.");
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ error: "API Key is missing." }),
+      };
+    }
+
+    // Initialize Resend
+    const resend = new Resend(apiKey);
+
     // 1. Get the user's email from the form submission
     const submission = JSON.parse(event.body).payload.data;
     const userEmail = submission.email;
+    const userRole = submission.role;
 
     if (!userEmail) {
       console.warn("No email found in submission.");
-      return { statusCode: 400, body: "No email provided." };
+      return { statusCode: 400, body: JSON.stringify({ error: "No email provided." }) };
     }
 
-    console.log(`Payload received. Attempting to send email to: ${userEmail}`);
+    console.log(`Payload received. Attempting to send email to: ${userEmail} (Role: ${userRole})`);
 
     // 2. Send the welcome email using Resend
     // IMPORTANT: 'from' address must be from a domain verified in Resend.
