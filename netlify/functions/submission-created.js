@@ -1,20 +1,19 @@
 /*
  * This is the Netlify Function that sends your welcome email.
+ * This version uses CommonJS (require) to be 100% compatible.
  * Filepath: netlify/functions/submission-created.js
  */
 
-// Import the Resend SDK
-import { Resend } from 'resend';
+// Use 'require' instead of 'import'
+const { Resend } = require('resend');
 
 // Get your secret API key from Netlify's Environment Variables
-// This will be set in your Netlify dashboard
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 // This is the main function that Netlify will run
-export const handler = async (event) => {
+exports.handler = async (event) => {
   try {
     // 1. Get the user's email from the form submission
-    // Netlify passes the form data in the 'event.body'
     const submission = JSON.parse(event.body).payload.data;
     const userEmail = submission.email;
 
@@ -45,6 +44,7 @@ export const handler = async (event) => {
     });
 
     // 4. Return a success message
+    console.log(`Welcome email sent to: ${userEmail}`);
     return {
       statusCode: 200,
       body: JSON.stringify({ message: "Welcome email sent successfully." }),
@@ -55,7 +55,7 @@ export const handler = async (event) => {
     console.error("Error sending welcome email:", error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: "Failed to send welcome email." }),
+      body: JSON.stringify({ error: error.message }),
     };
   }
 };
