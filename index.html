@@ -12,7 +12,69 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Handwriting Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&display=swap" rel="stylesheet">
     <style>
+        /* Solutions Section Card Hover (Best Practice Modern UI) */
+        .solution-card {
+            position: relative;
+            transition: box-shadow 0.28s cubic-bezier(.4,2,.6,1),
+                        transform 0.28s cubic-bezier(.4,2,.6,1),
+                        border-color 0.28s cubic-bezier(.4,2,.6,1),
+                        background 0.28s cubic-bezier(.4,2,.6,1);
+            will-change: box-shadow, transform, border-color, background;
+        }
+        .solution-card:hover, .solution-card:focus-within, .group:hover .solution-card {
+            box-shadow: 0 18px 48px 0 rgba(16, 38, 70, 0.18), 0 4px 16px 0 rgba(251,191,36,0.18);
+            transform: translateY(-6px) scale(1.045);
+            border-color: #f59e0b; /* amber-500 */
+        }
+        .solution-card .solution-overlay {
+            pointer-events: none;
+            transition: background 0.28s cubic-bezier(.4,2,.6,1), opacity 0.28s cubic-bezier(.4,2,.6,1);
+        }
+        /* On hover we hide the overlay so the solid amber background is visible */
+        .solution-card:hover .solution-overlay,
+        .solution-card:focus-within .solution-overlay,
+        .group:hover .solution-card .solution-overlay {
+            background: none !important;
+            opacity: 0 !important;
+        }
+
+        /* Make solution card background solid amber on hover/focus for clear accent */
+        .solution-card:hover,
+        .solution-card:focus-within,
+        .group:hover .solution-card {
+            background-image: none !important; /* override gradient utility classes */
+            background-color: #f59e0b !important; /* amber-500 */
+            color: #fff; /* default text becomes white for contrast */
+        }
+
+        /* Ensure card content is readable on amber background */
+        .solution-card:hover .relative.z-10 h3,
+        .solution-card:focus-within .relative.z-10 h3,
+        .group:hover .solution-card .relative.z-10 h3 {
+            color: #ffffff !important;
+        }
+        .solution-card:hover .relative.z-10 p,
+        .solution-card:focus-within .relative.z-10 p,
+        .group:hover .solution-card .relative.z-10 p {
+            color: rgba(255,255,255,0.92) !important;
+        }
+        .solution-card:hover .relative.z-10 i,
+        .solution-card:focus-within .relative.z-10 i,
+        .group:hover .solution-card .relative.z-10 i {
+            color: #ffffff !important;
+        }
+
+        /* If icons are implemented as SVGs by lucide, target svg fill/stroke too */
+        .solution-card:hover .relative.z-10 svg,
+        .solution-card:focus-within .relative.z-10 svg,
+        .group:hover .solution-card .relative.z-10 svg {
+            color: #ffffff !important;
+            fill: currentColor;
+            stroke: currentColor;
+        }
         body {
             font-family: 'Inter', sans-serif;
         }
@@ -20,42 +82,138 @@
             background: linear-gradient(120deg, #F9FAFB 60%, #EFF6FF 100%);
         }
         
-        /* Single-row left-to-right marquee (one row only) */
-        .marquee-row {
-            display: flex;
-            gap: 1.5rem;
-            align-items: stretch;
-            animation: marquee-ltr 36s linear infinite;
-        }
+        /* *
+         * NEW 100% NATURAL WAVE ANIMATION
+         * - Removed conflicting SVG <animate> tags
+         * - Removed "wave-rise" animation
+         * - Simplified to a single, linear "wave-flow"
+         * - Implemented true parallax with different durations
+         * */
 
-        .marquee-row:hover {
-            animation-play-state: paused;
-        }
-
-        @keyframes marquee-ltr {
+        @keyframes wave-flow {
             0% {
-                transform: translateX(-50%);
+                transform: translate3d(0, 0, 0);
             }
             100% {
-                transform: translateX(0%);
+                transform: translate3d(-50%, 0, 0); /* Moves by half its width (which is 100% of screen) */
             }
         }
 
-        .chaos-card {
-            flex-shrink: 0;
-            width: 420px;
-            background: white;
-            border: 1px solid rgba(226,232,240,0.9); /* slate-200 */
-            border-radius: 1rem;
-            padding: 1.25rem 1.5rem;
-            box-shadow: 0 6px 18px rgba(2,6,23,0.06);
-            transition: transform .28s cubic-bezier(.2,.9,.3,1), box-shadow .28s;
+        #problem-section {
+            isolation: isolate;
         }
 
-        .chaos-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 18px 36px rgba(2,6,23,0.12);
-            border-color: rgba(203,213,225,1);
+        .wave-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .wave {
+            position: absolute;
+            width: 200%;
+            height: 100%;
+            bottom: 0;
+            will-change: transform;
+            backface-visibility: hidden;
+            transform: scaleY(3.5);
+            transform-origin: bottom;
+        }
+        
+        /* Pain point cards styling */
+        .pain-point-card {
+            background: rgba(255,255,255,0.3);
+            border-radius: 1.5rem;
+            padding: 1.2rem 1.3rem 1.5rem 1.3rem;
+            box-shadow: 0 8px 32px 0 rgba(16, 38, 70, 0.10), 0 1.5px 6px 0 rgba(30,41,59,0.06);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            /* Keep card visually pleasing but avoid transforms/will-change to prevent stuck blur bug */
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: border-color 220ms ease;
+        }
+        /* Keep only icon color change on hover — remove overlay/border/heading color changes */
+        .pain-point-card > * { position: relative; z-index: 1; }
+
+        /* Only change the icon background color on hover or keyboard focus */
+        .pain-point-card:hover .pain-point-icon,
+        .pain-point-card:focus-within .pain-point-icon {
+            background-color: #f59e0b; /* amber-500 */
+            transition: background-color 220ms ease;
+        }
+
+        /* Turn all icons amber when hovering/focusing the whole cards area (full-width) */
+        .pain-points-grid:hover .pain-point-icon,
+        .pain-points-grid:focus .pain-point-icon,
+        .pain-points-grid:focus-within .pain-point-icon,
+        .pain-points-area:hover .pain-point-icon,
+        .pain-points-area:focus .pain-point-icon,
+        .pain-points-area:focus-within .pain-point-icon {
+            background-color: #f59e0b; /* amber-500 */
+            transition: background-color 220ms ease;
+        }
+
+        /* Make the outer pain-points area span the full viewport width so hovering left/right empty space triggers it */
+        .pain-points-area {
+            /* pull out of the centered container to full-viewport width */
+            margin-left: calc(50% - 50vw);
+            margin-right: calc(50% - 50vw);
+            padding-left: 1.5rem; /* keep some inner padding so content doesn't touch edges */
+            padding-right: 1.5rem;
+        }
+
+        /* Respect reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            .pain-point-card,
+            .pain-point-card > * {
+                transition: none !important;
+            }
+        }
+        
+        .pain-point-icon {
+            width: 2.1rem;
+            height: 2.1rem;
+            border-radius: 0.65rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.5rem;
+            background: #0b2e7b;
+        }
+
+        .wave {
+            position: absolute;
+            /* subtle background layer (blue-400) */
+            opacity: 0.18;
+            width: 200%; /* SVG is tiled twice */
+            height: 100%;
+            will-change: transform;
+            backface-visibility: hidden;
+            /* mid layer (blue-500) */
+            opacity: 0.36;
+        }
+
+        /* True Parallax: Front wave is fastest, back is slowest. All are linear. */
+        .wave-back {
+            animation: wave-flow 35s linear infinite;
+            opacity: 0.15;
+        }
+        
+        .wave-middle {
+            animation: wave-flow 22s linear infinite;
+            opacity: 0.28;
+        }
+        
+        .wave-front {
+            animation: wave-flow 15s linear infinite;
+            opacity: 0.45;
         }
     </style>
 </head>
@@ -63,6 +221,7 @@
 
     <!-- Header -->
     <header class="absolute top-0 left-0 w-full z-10 py-6 px-4 sm:px-6 lg:px-8">
+        <!-- ... existing header code ... -->
         <nav class="flex items-center justify-between">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
@@ -71,14 +230,13 @@
                         <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
+                    </div>
                 </div>
                 <div class="ml-3">
-                    <!-- CHANGED: text-gray-900 to text-slate-900 -->
                     <span class="text-2xl font-bold text-slate-900">BizGoAI</span>
                 </div>
             </div>
             <div class="hidden sm:block">
-                <!-- CHANGED: text-gray-600 to text-slate-600 -->
                 <a href="#vendor-info" class="text-sm font-medium text-slate-600 hover:text-slate-900">Are you a Vendor?</a>
             </div>
         </nav>
@@ -89,17 +247,16 @@
 
         <!-- Hero Section -->
         <div class="relative hero-bg overflow-hidden">
+            <!-- ... existing hero code ... -->
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="relative pt-24 pb-16 sm:pt-32 sm:pb-24 lg:grid lg:grid-cols-12 lg:gap-8">
                     
                     <!-- Left Column (Content) -->
                     <div class="lg:col-span-6 flex flex-col justify-center z-10">
-                        <!-- CHANGED: text-gray-900 to text-slate-900 -->
                         <h1 class="text-3xl font-bold tracking-tight text-[#0b2e7b] sm:text-4xl md:text-5xl lg:text-6xl">
                             Stop the AI Overwhelm.
                             <span class="block text-blue-600">Start Growing Together.</span>
                         </h1>
-                        <!-- CHANGED: text-gray-600 to text-slate-700 -->
                         <p class="mt-6 text-base text-slate-700 sm:text-lg lg:text-xl max-w-lg">
                             BizGoAI is the *only* community for small businesses to find trusted, peer-verified AI tools. No hype. Just real results from peers you can trust.
                         </p>
@@ -120,13 +277,8 @@
                                     <div class="flex items-center justify-between">
                                         <div class="flex items-center space-x-3">
                                             <div class="h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center overflow-hidden border border-slate-200">
-                                                <svg class="h-6 w-6 text-slate-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M3 20h18L12 4L3 20z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                    <path d="M12 4L8 20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                    <path d="M12 4L16 20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                </svg>
+                                                <img src="Untitled logo.png" alt="Apex Solutions Logo" class="h-7 w-7 object-contain" />
                                             </div>
-                                            <!-- CHANGED: text-gray-900 to text-slate-900 -->
                                             <h4 class="text-sm font-bold text-[#0b2e7b]">Apex Solutions</h4>
                                         </div>
                                         <div class="flex items-center">
@@ -134,7 +286,6 @@
                                             <span class="text-xs font-bold ml-1 text-slate-900">5.0</span>
                                         </div>
                                     </div>
-                                    <!-- CHANGED: text-gray-600 to text-slate-700 -->
                                     <p class="mt-2 text-sm text-slate-700">"Finally, a tool that just works. Saved me hours on scheduling."</p>
                                 </div>
                                 
@@ -143,22 +294,15 @@
                                     <div class="flex items-center justify-between">
                                         <div class="flex items-center space-x-3">
                                             <div class="h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center overflow-hidden border border-slate-200">
-                                                <svg class="h-6 w-6 text-slate-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
-                                                    <path d="M12 18L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                                    <path d="M16 14L8 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                                </svg>
+                                                <img src="design logo.png" alt="Acme Design Co. Logo" class="h-7 w-7 object-contain" />
                                             </div>
-                                            <!-- CHANGED: text-gray-900 to text-slate-900 -->
                                             <h4 class="text-sm font-bold text-[#0b2e7b]">Acme Design Co.</h4>
                                         </div>
                                         <div class="flex items-center">
                                             <svg class="h-4 w-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 15.172l-4.94 2.598 1.18-5.81-4.24-4.132 5.82-.84L10 2l2.62 5.088 5.82.84-4.24 4.132 1.18 5.81z" /></svg>
-                                            <!-- CHANGED: text-gray-900 to text-slate-900 -->
                                             <span class="text-xs font-bold ml-1 text-slate-900">4.8</span>
                                         </div>
                                     </div>
-                                    <!-- CHANGED: text-gray-600 to text-slate-700 -->
                                     <p class="mt-2 text-sm text-slate-700">"Great for project management. The peer reviews here were spot on."</p>
                                 </div>
 
@@ -167,16 +311,10 @@
                                     <div class="flex items-center justify-between">
                                         <div class="flex items-center space-x-3">
                                             <div class="h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center overflow-hidden border border-slate-200">
-                                                <svg class="h-6 w-6 text-slate-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M8 10V8c0-2.21 1.79-4 4-4s4 1.79 4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                    <path d="M16 10H8c-3.31 0-6 2.69-6 6v0c0 3.31 2.69 6 6 6h8c3.31 0 6-2.69 6-6v0c0-3.31-2.69-6-6-6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                    <path d="M12 15c-1.1 0-2 .9-2 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                                </svg>
+                                                <img src="coffee logo.png" alt="Main St. Roasters Logo" class="h-7 w-7 object-contain" />
                                             </div>
                                             <div>
-                                                <!-- CHANGED: text-gray-900 to text-slate-900 -->
                                                 <h3 class="text-lg font-bold text-[#0b2e7b]">Main St. Roasters</h3>
-                                                <!-- CHANGED: text-gray-500 to text-slate-500 -->
                                                 <p class="text-sm text-slate-500">Sales & CRM</p>
                                             </div>
                                         </div>
@@ -184,9 +322,7 @@
                                             BizgoAI top member
                                         </span>
                                     </div>
-                                    <!-- CHANGED: text-gray-700 to text-slate-700 -->
                                     <p class="mt-4 text-slate-700">"This tool saved us 10+ hours a week. It actually does what it promises, and setup was a breeze for our non-technical team."</p>
-                                    <!-- CHANGED: border-gray-200 to border-slate-200 -->
                                     <div class="mt-4 pt-4 border-t border-slate-200">
                                         <div class="flex items-center justify-between">
                                             <div class="flex items-center space-x-2">
@@ -195,7 +331,6 @@
                                             </div>
                                             <div class="flex items-center space-x-1">
                                                 <svg class="h-5 w-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 15.172l-4.94 2.598 1.18-5.81-4.24-4.132 5.82-.84L10 2l2.62 5.088 5.82.84-4.24 4.132 1.18 5.81z" /></svg>
-                                                <!-- CHANGED: text-gray-900 to text-slate-900 -->
                                                 <span class="text-sm font-bold text-slate-900">4.9</span>
                                             </div>
                                         </div>
@@ -208,136 +343,208 @@
             </div>
         </div>
 
-        <!-- "Problem" Section -->
-        <section class="py-16 sm:py-24 bg-white overflow-hidden">
-            <div class="max-w-3xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-                <!-- CHANGED: text-gray-900 to text-slate-900 -->
-                <h2 class="text-3xl font-bold tracking-tight text-[#0b2e7b] sm:text-4xl">
-                    Small Businesses are Drowning in AI Solutions Chaos
-                </h2>
-                <!-- CHANGED: text-gray-600 to text-slate-700 -->
-                <p class="mt-6 text-xl text-slate-700">
-                    Increasing pressure to adopt AI and rapid tech changes. No time, budget, or expertise to do it right. You're buried in vendor hype, struggling to find solutions that actually work.
-                </p>
+    <!-- Problem Section with Professional Wave Animation -->
+    <section id="problem-section" class="pt-16 pb-4 sm:pt-20 sm:pb-6 bg-white overflow-hidden relative">
+            
+            <!-- Wave Animation Container -->
+            <div class="wave-container">
+                <!-- Back Wave (Lighter, slower) -->
+                <!-- DELETED <animate> tag -->
+                <!-- NEW complex, tileable path -->
+                <svg class="wave wave-back" preserveAspectRatio="none" viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="wave-gradient-1" x1="0%" y1="100%" x2="0%" y2="0%">
+                            <!-- Back wave: chaos (darker) to clarity (lighter) -->
+                            <stop offset="0%" style="stop-color:rgba(37,99,235,0.25);stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:rgba(147,197,253,0.08);stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M0 80 Q 300 20 600 80 T 1200 80 L 1200 120 L 0 120 Z" fill="url(#wave-gradient-1)" />
+                </svg>
+
+                <!-- Middle Wave -->
+                <!-- DELETED <animate> tag -->
+                <!-- NEW complex, tileable path -->
+                <svg class="wave wave-middle" preserveAspectRatio="none" viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="wave-gradient-2" x1="0%" y1="100%" x2="0%" y2="0%">
+                            <!-- Middle wave: chaos (darker) to clarity (lighter) -->
+                            <stop offset="0%" style="stop-color:rgba(37,99,235,0.35);stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:rgba(147,197,253,0.12);stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M0 70 Q 200 90 400 70 T 800 70 T 1200 70 L 1200 120 L 0 120 Z" fill="url(#wave-gradient-2)" />
+                </svg>
+
+                <!-- Front Wave (Darker, more prominent) -->
+                <!-- DELETED <animate> tag -->
+                <!-- NEW complex, tileable path -->
+                <svg class="wave wave-front" preserveAspectRatio="none" viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="wave-gradient-3" x1="0%" y1="100%" x2="0%" y2="0%">
+                            <!-- Front wave: chaos (darker) to clarity (lighter) -->
+                            <stop offset="0%" style="stop-color:rgba(37,99,235,0.5);stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:rgba(147,197,253,0.15);stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M0 60 Q 150 80 300 60 T 600 60 T 900 60 T 1200 60 L 1200 120 L 0 120 Z" fill="url(#wave-gradient-3)" />
+                </svg>
             </div>
             
-            <!-- Chaos Marquee (single row, left-to-right) -->
-            <div class="mt-16 w-full overflow-hidden" aria-hidden="false">
-                <div class="marquee-row" style="width:200%;">
-                    <!-- original set -->
-                    <div class="chaos-card mx-4">
-                        <p class="text-lg font-medium text-slate-700">"AI is everywhere now. Where do I even begin?"</p>
+            <!-- Text Content (On Top, Always Readable) -->
+            <div class="relative z-20 max-w-5xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-bold tracking-tight text-blue-600 sm:text-4xl lg:text-5xl mb-6 drop-shadow-sm">
+                    Small Businesses are Drowning <br> in AI Solutions Chaos
+                </h2>
+                <p class="mt-4 text-[1.28rem] sm:text-[1.38rem] max-w-3xl mx-auto drop-shadow-sm text-[#0b2e7b] font-bold" style="line-height: 1.5;">
+                    Increasing pressure to adopt AI and rapid tech changes.<br>
+                    Struggling to navigate & find solutions that actually work.
+                </p>
+                
+                <!-- Pain Point Cards -->
+                                <div class="mt-8 relative pain-points-area" tabindex="0">
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto pain-points-grid">
+                    <!-- Card 1: No Time -->
+                    <div class="pain-point-card">
+                        <div class="pain-point-icon mb-4">
+                            <svg class="w-8 h-8" fill="none" stroke="#fff" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-extrabold mb-3" style="color:#0b2e7b;">Time</h3>
+                        <p class="text-slate-500 text-base font-light leading-relaxed">Overwhelmed by daily operations with no bandwidth to research AI solutions</p>
                     </div>
-                    <div class="chaos-card mx-4">
-                        <p class="text-lg font-medium text-slate-700">"I’m worried I’ll waste money on AI tools that don’t fit what we need."</p>
+                    
+                    <!-- Card 2: No Budget -->
+                    <div class="pain-point-card">
+                        <div class="pain-point-icon">
+                            <svg class="w-8 h-8" fill="none" stroke="#fff" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-extrabold mb-3" style="color:#0b2e7b;">Budget</h3>
+                        <p class="text-slate-500 text-base font-light leading-relaxed">Limited resources and fear of wasting money on tools that won't deliver ROI</p>
                     </div>
-                    <div class="chaos-card mx-4">
-                        <p class="text-lg font-medium text-slate-700">"I just spent a week integrating a tool and it didn't even work."</p>
+                    
+                    <!-- Card 3: No Expertise -->
+                    <div class="pain-point-card">
+                        <div class="pain-point-icon">
+                            <svg class="w-8 h-8" fill="none" stroke="#fff" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-extrabold mb-3" style="color:#0b2e7b;">Expertise</h3>
+                        <p class="text-slate-500 text-base font-light leading-relaxed">Lack technical knowledge and special IT team to evaluate AI tools, and struggling with implementation</p>
                     </div>
-                    <div class="chaos-card mx-4">
-                        <p class="text-lg font-medium text-slate-700">"I can't tell which of these reviews are fake."</p>
-                    </div>
-                    <div class="chaos-card mx-4">
-                        <p class="text-lg font-medium text-slate-700">"My competitor is using AI... I feel like I'm falling behind."</p>
-                    </div>
-                    <!-- duplicate set for seamless loop -->
-                    <div class="chaos-card mx-4" aria-hidden="true">
-                        <p class="text-lg font-medium text-slate-700">"AI is everywhere now. Where do I even begin?"</p>
-                    </div>
-                    <div class="chaos-card mx-4" aria-hidden="true">
-                        <p class="text-lg font-medium text-slate-700">"I’m worried I’ll waste money on AI tools that don’t fit what we need."</p>
-                    </div>
-                    <div class="chaos-card mx-4" aria-hidden="true">
-                        <p class="text-lg font-medium text-slate-700">"I just spent a week integrating a tool and it didn't even work."</p>
-                    </div>
-                    <div class="chaos-card mx-4" aria-hidden="true">
-                        <p class="text-lg font-medium text-slate-700">"I can't tell which of these reviews are fake."</p>
-                    </div>
-                    <div class="chaos-card mx-4" aria-hidden="true">
-                        <p class="text-lg font-medium text-slate-700">"My competitor is using AI... I feel like I'm falling behind."</p>
+                </div>
+                
+                <!-- Transitional CTA -->
+                <div class="mt-8 mb-0">
+                    <div class="inline-flex items-center text-blue-600 font-semibold text-lg">
+                        <span class="mr-2">Here's how BizgoAI solves this problems</span>
+                        <svg class="w-5 h-5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                        </svg>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- "Solution" Section -->
-        <!-- CHANGED: bg-gray-50 to bg-slate-50 -->
-        <section class="py-16 sm:py-24 bg-slate-50">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center">
-                    <!-- CHANGED: text-gray-900 to text-slate-900 -->
-                    <h2 class="text-3xl font-bold tracking-tight text-[#0b2e7b] sm:text-4xl">
-                        BizGoAI Fixes This
+
+    <!-- "Solution" Section -->
+    <section class="py-16 sm:py-24 bg-gradient-to-b from-slate-50 via-blue-50/30 to-slate-50 relative overflow-hidden">
+            <!-- Subtle background pattern -->
+            <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(circle at 1px 1px, #2563eb 1px, transparent 0); background-size: 40px 40px;"></div>
+            
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <!-- Enhanced header with tagline -->
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-4xl font-bold tracking-tight text-[#0b2e7b] sm:text-5xl lg:text-6xl mb-6">
+                        BizgoAI Solutions
                     </h2>
+                    <p class="text-xl text-slate-600 font-medium">
+                    Empower small businesses through AI and collaboration
+                    </p>
                 </div>
 
-                <!-- 6-Card Grid with Thematic Colors -->
-                <div class="mt-20 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-
-                    <!-- 1. Small biz first (PRODUCT = BLUE) -->
-                    <div class="bg-white p-8 rounded-2xl shadow-lg">
-                        <div class="flex items-center justify-center h-14 w-14 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg">
-                            <i data-lucide="target" class="w-8 h-8 text-white"></i>
+                <!-- Enhanced 6-Card Grid with Visual Hierarchy -->
+                <div class="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+                    <!-- 1. Small biz first (BLUE BG blur, BLUE HEADLINE/ICON) -->
+                    <div class="group relative solution-card bg-gradient-to-br from-white via-white to-blue-50/50 p-6 rounded-3xl shadow-2xl transition-all duration-300 -translate-y-2 border border-blue-100/50 backdrop-blur-sm focus-within:ring-2 focus-within:ring-amber-400" tabindex="0">
+                        <div class="solution-overlay absolute inset-0 bg-gradient-to-br from-blue-500/0 to-blue-600/5 rounded-3xl opacity-100 transition-opacity duration-300"></div>
+                        <div class="relative z-10">
+                            <div class="flex items-center justify-center h-16 w-16 rounded-2xl bg-gradient-to-br from-[#0b2e7b] to-blue-600 shadow-lg scale-110 transition-transform duration-300">
+                                <i data-lucide="target" class="w-8 h-8 text-white"></i>
+                            </div>
+                            <h3 class="mt-6 text-xl font-extrabold text-[#0b2e7b] transition-colors">Small biz first (1-100)</h3>
+                            <p class="mt-3 text-slate-600 leading-relaxed">Built for the real needs, scale, and budget of small businesses.</p>
                         </div>
-                        <!-- CHANGED: text-slate-900 -->
-                        <h3 class="mt-6 text-xl font-bold text-[#0b2e7b]">Small biz first (1-100)</h3>
-                        <!-- CHANGED: text-slate-700 -->
-                        <p class="mt-3 text-slate-700">A system designed specifically for the real needs, scale, and budget of small businesses.</p>
                     </div>
 
-                    <!-- 2. Top AI Solutions (PRODUCT = BLUE) -->
-                    <div class="bg-white p-8 rounded-2xl shadow-lg">
-                        <div class="flex items-center justify-center h-14 w-14 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg">
-                            <i data-lucide="star" class="w-8 h-8 text-white"></i>
+                    <!-- 2. Real Feedback (BLUE BG blur, MATCH H2 BLUE-600 HEADLINE/ICON) -->
+                    <div class="group relative solution-card bg-gradient-to-br from-white via-white to-blue-50/50 p-6 rounded-3xl shadow-2xl transition-all duration-300 -translate-y-2 border border-blue-100/50 backdrop-blur-sm focus-within:ring-2 focus-within:ring-amber-400" tabindex="0">
+                        <div class="solution-overlay absolute inset-0 bg-gradient-to-br from-blue-500/0 to-blue-600/5 rounded-3xl opacity-100 transition-opacity duration-300"></div>
+                        <div class="relative z-10">
+                            <div class="flex items-center justify-center h-16 w-16 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg scale-110 transition-transform duration-300">
+                                <i data-lucide="shield-check" class="w-8 h-8 text-white"></i>
+                            </div>
+                            <h3 class="mt-6 text-xl font-extrabold text-blue-600 transition-colors">Real Feedback from s-biz Like Yours</h3>
+                            <p class="mt-3 text-slate-600 leading-relaxed">Get honest reviews and insights from real small businesses.</p>
                         </div>
-                        <!-- CHANGED: text-slate-900 -->
-                        <h3 class="mt-6 text-xl font-bold text-[#0b2e7b]">Top AI Solutions</h3>
-                        <!-- CHANGED: text-slate-700 -->
-                        <p class="mt-3 text-slate-700">Discover trusted, high-quality AI tools curated to meet your unique business challenges.</p>
                     </div>
                     
-                    <!-- 3. Real Feedback (COMMUNITY = AMBER) -->
-                    <div class="bg-white p-8 rounded-2xl shadow-lg">
-                        <div class="flex items-center justify-center h-14 w-14 rounded-xl bg-gradient-to-br from-amber-400 to-amber-500 shadow-lg">
-                            <i data-lucide="shield-check" class="w-8 h-8 text-white"></i>
+                    <!-- 3. Top AI Solutions (BLUE BG blur, BLUE HEADLINE/ICON) -->
+                    <div class="group relative solution-card bg-gradient-to-br from-white via-white to-blue-50/50 p-6 rounded-3xl shadow-2xl transition-all duration-300 -translate-y-2 border border-blue-100/50 backdrop-blur-sm focus-within:ring-2 focus-within:ring-amber-400" tabindex="0">
+                        <div class="solution-overlay absolute inset-0 bg-gradient-to-br from-blue-500/0 to-blue-600/5 rounded-3xl opacity-100 transition-opacity duration-300"></div>
+                        <div class="relative z-10">
+                            <div class="flex items-center justify-center h-16 w-16 rounded-2xl bg-gradient-to-br from-[#0b2e7b] to-blue-600 shadow-lg scale-110 transition-transform duration-300">
+                                <i data-lucide="star" class="w-8 h-8 text-white"></i>
+                            </div>
+                            <h3 class="mt-6 text-xl font-extrabold text-[#0b2e7b] transition-colors">Top AI Solutions</h3>
+                            <p class="mt-3 text-slate-600 leading-relaxed">Find trusted, high-quality AI tools for your unique business needs.</p>
                         </div>
-                        <!-- CHANGED: text-slate-900 -->
-                        <h3 class="mt-6 text-xl font-bold text-[#0b2e7b]">Real Feedback from s-biz Like Yours</h3>
-                        <!-- CHANGED: text-slate-700 -->
-                        <p class="mt-3 text-slate-700">Learn from honest reviews and insights from verified small business owners, not sponsored posts.</p>
                     </div>
 
-                    <!-- 4. Strong Networking (COMMUNITY = AMBER) -->
-                    <div class="bg-white p-8 rounded-2xl shadow-lg">
-                        <div class="flex items-center justify-center h-14 w-14 rounded-xl bg-gradient-to-br from-amber-400 to-amber-500 shadow-lg">
-                            <i data-lucide="users" class="w-8 h-8 text-white"></i>
+                    <!-- 4. Strong Networking (BLUE BG blur, MATCH H2 BLUE-600 HEADLINE/ICON) -->
+                    <div class="group relative solution-card bg-gradient-to-br from-white via-white to-blue-50/50 p-6 rounded-3xl shadow-2xl transition-all duration-300 -translate-y-2 border border-blue-100/50 backdrop-blur-sm focus-within:ring-2 focus-within:ring-amber-400" tabindex="0">
+                        <div class="solution-overlay absolute inset-0 bg-gradient-to-br from-blue-500/0 to-blue-600/5 rounded-3xl opacity-100 transition-opacity duration-300"></div>
+                        <div class="relative z-10">
+                            <div class="flex items-center justify-center h-16 w-16 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg scale-110 transition-transform duration-300">
+                                <i data-lucide="users" class="w-8 h-8 text-white"></i>
+                            </div>
+                            <h3 class="mt-6 text-xl font-extrabold text-blue-600 transition-colors">Strong Networking & Community</h3>
+                            <p class="mt-3 text-slate-600 leading-relaxed">Connect, share experiences, and grow with other small business.</p>
                         </div>
-                        <!-- CHANGED: text-slate-900 -->
-                        <h3 class="mt-6 text-xl font-bold text-[#0b2e7b]">Strong Networking & Community</h3>
-                        <!-- CHANGED: text-slate-700 -->
-                        <p class="mt-3 text-slate-700">Connect with peers, share experiences, and grow together in a collaborative environment.</p>
                     </div>
 
-                    <!-- 5. Open Communication (COMMUNITY = AMBER) -->
-                    <div class="bg-white p-8 rounded-2xl shadow-lg">
-                        <div class="flex items-center justify-center h-14 w-14 rounded-xl bg-gradient-to-br from-amber-400 to-amber-500 shadow-lg">
-                            <i data-lucide="lightbulb" class="w-8 h-8 text-white"></i>
+                    <!-- 5. User-Friendly Search (BLUE BG blur, BLUE HEADLINE/ICON) -->
+                    <div class="group relative solution-card bg-gradient-to-br from-white via-white to-blue-50/50 p-6 rounded-3xl shadow-2xl transition-all duration-300 -translate-y-2 border border-blue-100/50 backdrop-blur-sm focus-within:ring-2 focus-within:ring-amber-400" tabindex="0">
+                        <div class="solution-overlay absolute inset-0 bg-gradient-to-br from-blue-500/0 to-blue-600/5 rounded-3xl opacity-100 transition-opacity duration-300"></div>
+                        <div class="relative z-10">
+                            <div class="flex items-center justify-center h-16 w-16 rounded-2xl bg-gradient-to-br from-[#0b2e7b] to-blue-600 shadow-lg scale-110 transition-transform duration-300">
+                                <i data-lucide="search" class="w-8 h-8 text-white"></i>
+                            </div>
+                            <h3 class="mt-6 text-xl font-extrabold text-[#0b2e7b] transition-colors">User-Friendly, Simple Search</h3>
+                            <p class="mt-3 text-slate-600 leading-relaxed">Easily search for solutions tailored to your industry, budget, and needs.</p>
                         </div>
-                        <!-- CHANGED: text-slate-900 -->
-                        <h3 class="mt-6 text-xl font-bold text-[#0b2e7b]">Open, Transparent Communication</h3>
-                        <!-- CHANGED: text-slate-700 -->
-                        <p class="mt-3 text-slate-700">Engage with tool creators who value your feedback and success. Your voice matters here.</p>
                     </div>
-                    
-                    <!-- 6. User-Friendly Search (PRODUCT = BLUE) -->
-                    <div class="bg-white p-8 rounded-2xl shadow-lg">
-                        <div class="flex items-center justify-center h-14 w-14 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg">
-                            <i data-lucide="search" class="w-8 h-8 text-white"></i>
+
+                    <!-- 6. Open Communication (BLUE BG blur, MATCH H2 BLUE-600 HEADLINE/ICON) -->
+                    <div class="group relative solution-card bg-gradient-to-br from-white via-white to-blue-50/50 p-6 rounded-3xl shadow-2xl transition-all duration-300 -translate-y-2 border border-blue-100/50 backdrop-blur-sm focus-within:ring-2 focus-within:ring-amber-400" tabindex="0">
+                        <div class="solution-overlay absolute inset-0 bg-gradient-to-br from-blue-500/0 to-blue-600/5 rounded-3xl opacity-100 transition-opacity duration-300"></div>
+                        <div class="relative z-10">
+                            <div class="flex items-center justify-center h-16 w-16 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg scale-110 transition-transform duration-300">
+                                <i data-lucide="lightbulb" class="w-8 h-8 text-white"></i>
+                            </div>
+                            <h3 class="mt-6 text-xl font-extrabold text-blue-600 transition-colors">Open, Transparent Communication</h3>
+                            <p class="mt-3 text-slate-600 leading-relaxed">Engage with tool creators who value your feedback and success.</p>
                         </div>
-                        <!-- CHANGED: text-slate-900 -->
-                        <h3 class="mt-6 text-xl font-bold text-[#0b2e7b]">User-Friendly, Simple Search</h3>
-                        <!-- CHANGED: text-slate-700 -->
-                        <p class="mt-3 text-slate-700">Find solutions tailored to your industry, budget, and needs with a simple, guided search. No more noise.</p>
+                    </div>
+                    <!-- CTA: Join Waitlist (amber) -->
+                    <div class="mt-6 col-span-full text-center mb-6">
+                        <a href="#signup-form" class="inline-flex items-center justify-center px-10 py-4 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold text-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-500 transition-colors">
+                            Join Waitlist
+                        </a>
                     </div>
                 </div>
             </div>
@@ -345,16 +552,14 @@
         
         <!-- Secondary Section (For Vendors) - De-emphasized -->
         <section id="vendor-info" class="py-16 sm:py-24 bg-white">
+            <!-- ... existing vendor section code ... -->
             <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-                <!-- CHANGED: text-gray-900 to text-slate-900 -->
                 <h2 class="text-2xl font-bold tracking-tight text-[#0b2e7b] sm:text-3xl">
                     Are You an AI Vendor?
                 </h2>
-                <!-- CHANGED: text-gray-600 to text-slate-700 -->
                 <p class="mt-4 text-lg text-slate-700">
                     We're building a community of qualified, high-intent SMBs first. If you build a great product and value honest feedback, join the waitlist. We'll be in touch.
                 </p>
-                <!-- CHANGED: text-gray-700, bg-gray-50, hover:bg-gray-100 -->
                 <a href="#signup-form"
                     class="mt-8 w-full inline-flex items-center justify-center px-6 py-3 border border-slate-300 rounded-lg shadow-sm text-base font-medium text-slate-700 bg-slate-50 hover:bg-slate-100 sm:w-auto">
                     Join as a Vendor
@@ -364,6 +569,7 @@
 
         <!-- Final CTA & Form Section -->
         <section id="signup-form" class="bg-blue-600">
+            <!-- ... existing CTA form code ... -->
             <div class="max-w-3xl mx-auto text-center py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
                 <h2 class="text-3xl font-bold text-white sm:text-4xl">
                     <span class="block">Ready to change how small business does AI?</span>
@@ -376,21 +582,17 @@
                 <div id="waitlist-card" class="w-full bg-white rounded-xl shadow-2xl p-6 sm:p-10 mt-12 text-left">
                     <form id="waitlist-form" class="space-y-5">
                         <div>
-                            <!-- CHANGED: text-gray-700 to text-slate-700 -->
                             <label for="email" class="block text-sm font-medium text-slate-700">Email Address</label>
-                            <!-- CHANGED: border-gray-300, focus rings -->
                             <input type="email" name="email" id="email" required
                                 class="mt-1 block w-full px-4 py-3 border border-slate-300 rounded-lg shadow-sm focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm"
                                 placeholder="you@company.com">
                         </div>
                         <div>
-                            <!-- CHANGED: text-gray-700 to text-slate-700 -->
                             <label for="role" class="block text-sm font-medium text-slate-700">I am a...</label>
-                            <!-- CHANGED: border-gray-300, focus rings -->
                             <select id="role" name="role" required
                                 class="mt-1 block w-full pl-3 pr-10 px-4 py-3 text-base border border-slate-300 focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm rounded-lg">
-                                <option value="smb_buyer" selected>Small Business / AI Buyer</option>
-                                <option value="ai_vendor">AI Vendor / Creator</option>
+                                <option value="smb_buyer" selected>Small Business</option>
+                                <option value="ai_vendor">AI Vendor</option>
                                 <option value="other">Other</option>
                             </select>
                         </div>
@@ -403,7 +605,6 @@
                                 Get My Invite
                             </button>
                         </div>
-                        <!-- CHANGED: text-gray-500 to text-slate-500 -->
                         <p class="text-xs text-slate-500 text-center">
                             Be the first. Become a founding member. No spam, ever.
                         </p>
@@ -414,27 +615,21 @@
                         <svg class="mx-auto h-12 w-12 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        <!-- CHANGED: text-gray-900 to text-slate-900 -->
                         <h3 class="mt-4 text-2xl font-bold text-[#0b2e7b]">You're a founding member!</h3>
-                        <!-- CHANGED: text-gray-600 to text-slate-700 -->
                         <p class="mt-3 text-slate-700">Welcome to the BizGoAI small business community. Check your inbox for your welcome email.</p>
                         <p class="mt-2 text-slate-700">Thank you for trusting us. We'll keep you posted on exclusive updates, launch dates, and member perks.</p>
                         
-                        <!-- CHANGED: bg-gray-50 to bg-slate-50 -->
                         <div class="mt-8 text-center bg-slate-50 p-6 rounded-lg">
                             <span class="text-sm font-semibold text-amber-600 uppercase tracking-wider">FOUNDING MEMBER</span>
-                            <!-- CHANGED: text-gray-900 to text-slate-900 -->
                             <p class="mt-2 text-base font-medium text-slate-900">We are building a strong SMBs community. Share BizGoAI with other small businesses who'd benefit.</p>
                             
                             <div class="flex items-center justify-center space-x-4 mt-4">
-                                <!-- CHANGED: text-gray-400 to text-slate-400, hover:text-slate-500 -->
-                                <a href="https://twitter.com/intent/tweet?text=I%27m%20on%20the%20waitlist%20for%20BizGoAI%2C%20a%20new%20community%20for%20SMBs%20to%20find%20trusted%20AI%20tools.%20Join%20me%3A&url=https%3A%2F%2Fwww.BizgoAI.com" target="_blank" class="text-slate-400 hover:text-slate-500">
+                                <a href="https://twitter.com/intent/tweet?text=I%27m%20on%2t%20for%20BizGoAI%2C%20a%20new%20community%20for%20SMBs%20to%20find%20trusted%20AI%20tools.%20Join%20me%3A&url=https...%2F%2Fwww.BizgoAI.com" target="_blank" class="text-slate-400 hover:text-slate-500">
                                     <span class="sr-only">Twitter</span>
                                     <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                         <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.71v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
                                     </svg>
                                 </a>
-                                <!-- CHANGED: text-gray-400 to text-slate-400, hover:text-slate-500 -->
                                 <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fwww.BizgoAI.com" target="_blank" class="text-slate-400 hover:text-slate-500">
                                     <span class="sr-only">LinkedIn</span>
                                     <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -442,7 +637,6 @@
                                     </svg>
                                 </a>
                             </div>
-                            <!-- CHANGED: text-gray-700 to text-slate-700 -->
                             <p class="mt-4 text-sm text-slate-700">www.BizgoAI.com</p>
                         </div>
                     </div>
@@ -453,8 +647,8 @@
     </main>
 
     <!-- Footer -->
-    <!-- CHANGED: text-gray-400 to text-slate-400, etc. -->
     <footer class="bg-slate-900 text-slate-400">
+        <!-- ... existing footer code ... -->
         <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row items-center justify-between">
                 <div class="flex items-center space-x-6 mb-6 md:mb-0">
@@ -479,7 +673,6 @@
                     </a>
                 </div>
             </div>
-            <!-- CHANGED: border-gray-700, text-gray-500 -->
             <div class="mt-8 border-t border-slate-700 pt-8 text-center">
                 <p class="text-base text-slate-500">&copy; 2025 BizGoAI. Built for small businesses, by small business advocates.</p>
             </div>
@@ -487,23 +680,60 @@
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', () => {
+            // Force repaint of pain-point cards when problem section enters viewport (fixes stuck blur bug)
+            (function() {
+                const section = document.getElementById('problem-section');
+                if (!section) return;
+                const cards = section.querySelectorAll('.pain-point-card');
+                const repaint = () => {
+                    cards.forEach(card => {
+                        card.style.transform = 'scale(1)'; // force a repaint
+                        // Optionally toggle a class to force style recalc
+                        card.classList.remove('repaint-hack');
+                        void card.offsetWidth; // force reflow
+                        card.classList.add('repaint-hack');
+                    });
+                };
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting && entry.intersectionRatio > 0.1) {
+                            repaint();
+                        }
+                    });
+                }, {
+                    root: null,
+                    rootMargin: '0px',
+                    threshold: 0.1
+                });
+                observer.observe(section);
+            })();
             // Initialize Lucide icons
             lucide.createIcons();
-            
+
+            // Smooth scroll to form on any CTA click (hero or solutions section)
+            document.querySelectorAll('a[href="#signup-form"]')
+                .forEach(function(ctaBtn) {
+                    ctaBtn.addEventListener('click', function(e) {
+                        const formSection = document.getElementById('signup-form');
+                        if (formSection) {
+                            e.preventDefault();
+                            formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                    });
+                });
+
+            // ... existing form submission code ...
             const form = document.getElementById('waitlist-form');
             const button = document.getElementById('submit-button');
             const formMessage = document.getElementById('form-message');
-            
             const waitlistCard = document.getElementById('waitlist-card');
             const successMessage = document.getElementById('success-message');
 
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
-                
                 formMessage.textContent = '';
                 formMessage.className = 'text-sm';
-
                 const emailInput = document.getElementById('email');
                 const roleSelect = document.getElementById('role');
                 const email = emailInput.value;
@@ -515,14 +745,13 @@
                     emailInput.focus();
                     return;
                 }
-
                 if (!role) {
                     formMessage.textContent = 'Please select your role.';
                     formMessage.classList.add('text-red-600');
                     roleSelect.focus();
                     return;
                 }
-                
+
                 button.disabled = true;
                 button.textContent = 'Submitting...';
                 button.classList.add('opacity-75', 'cursor-not-allowed');
@@ -537,9 +766,38 @@
             });
 
             function validateEmail(email) {
-                const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-g]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
                 return re.test(String(email).toLowerCase());
             }
+
+            // NEW: IntersectionObserver for wave animation (play/pause)
+            (function() {
+                const section = document.getElementById('problem-section');
+                if (!section) return;
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        const waves = section.querySelectorAll('.wave');
+                        if (entry.isIntersecting && entry.intersectionRatio > 0.1) {
+                            // Play animation
+                            waves.forEach(wave => {
+                                wave.style.animationPlayState = 'running';
+                            });
+                        } else {
+                            // Pause animation when off-screen
+                            waves.forEach(wave => {
+                                wave.style.animationPlayState = 'paused';
+                            });
+                        }
+                    });
+                }, { 
+                    root: null, 
+                    rootMargin: '0px', 
+                    threshold: 0.1 // Triggers when 10% of the section is visible
+                });
+
+                observer.observe(section);
+            })();
         });
     </script>
 
