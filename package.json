@@ -1,0 +1,14 @@
+{
+  "name": "bizgoai-waitlist",
+  "version": "1.0.0",
+  "description": "Netlify function to send Resend emails for BizGoAI",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "resend": "^3.2.0"
+  }
+}
