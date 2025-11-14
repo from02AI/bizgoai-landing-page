@@ -646,19 +646,23 @@
                 button.textContent = 'Submitting...';
                 button.classList.add('opacity-75', 'cursor-not-allowed');
 
-                // Send form data to Netlify
+                // Send form data to Netlify Forms
                 try {
                     const formData = new FormData(form);
                     
-                    // Submit to Netlify Forms
-                    const response = await fetch('/', {
+                    // CRITICAL: Submit to the current page URL to ensure Netlify captures it
+                    const response = await fetch(window.location.pathname, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                         body: new URLSearchParams(formData).toString()
                     });
 
-                    if (response.ok) {
+                    console.log('Form submitted. Response status:', response.status);
+                    
+                    // Netlify returns a redirect (302/200) on successful form submission
+                    if (response.ok || response.status === 302) {
                         // Success - show success message
+                        console.log('Form submission successful!');
                         form.classList.add('hidden');
                         successMessage.classList.remove('hidden');
                         if(waitlistCard) {
