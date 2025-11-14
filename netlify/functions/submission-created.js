@@ -1,31 +1,63 @@
 /*
  * This is the Netlify Function that sends your welcome email.
- * This version uses CommonJS (require) to be 100% compatible.
+ * This version has enhanced, step-by-step logging to find the error.
  * Filepath: netlify/functions/submission-created.js
  */
 
-// Use 'require' instead of 'import'
-const { Resend } = require('resend');
+// We will wrap EVERYTHING in a try/catch, even the 'require'
+let Resend;
+try {
+  Resend = require('resend').Resend;
+} catch (e) {
+  console.error("CRITICAL: Failed to 'require' Resend. 'resend' is not installed.", e);
+  return {
+    statusCode: 500,
+    body: JSON.stringify({ error: "Function dependency failure." }),
+  };
+}
 
-// Get your secret API key from Netlify's Environment Variables
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Get your secret API key
+const apiKey = process.env.RESEND_API_KEY;
+if (!apiKey) {
+  console.error("CRITICAL: RESEND_API_KEY is missing or undefined.");
+  return {
+    statusCode: 500,
+    body: JSON.stringify({ error: "API Key is missing." }),
+  };
+}
+
+// Initialize Resend
+let resend;
+try {
+  resend = new Resend(apiKey);
+} catch (e) {
+  console.error("CRITICAL: Failed to initialize 'new Resend(apiKey)'. API key is likely invalid.", e);
+  return {
+    statusCode: 500,
+    body: JSON.stringify({ error: "Resend initialization failed." }),
+  };
+}
+
 
 // This is the main function that Netlify will run
 exports.handler = async (event) => {
+  // This is the first log. If you see this, the function is running.
+  console.log("Function 'submission-created' has started.");
+
   try {
     // 1. Get the user's email from the form submission
     const submission = JSON.parse(event.body).payload.data;
     const userEmail = submission.email;
 
-    // 2. Make sure an email was actually provided
     if (!userEmail) {
       console.warn("No email found in submission.");
       return { statusCode: 400, body: "No email provided." };
     }
 
-    // 3. Send the welcome email using Resend
-    // IMPORTANT: You must change 'welcome@bizgoai.com' to an email from a 
-    // domain you have verified in your Resend account.
+    console.log(`Payload received. Attempting to send email to: ${userEmail}`);
+
+    // 2. Send the welcome email using Resend
+    // IMPORTANT: 'from' address must be from a domain verified in Resend.
     await resend.emails.send({
       from: 'BizGoAI <welcome@bizgoai.com>', 
       to: [userEmail],
@@ -43,16 +75,16 @@ exports.handler = async (event) => {
       `,
     });
 
-    // 4. Return a success message
-    console.log(`Welcome email sent to: ${userEmail}`);
+    // 3. Return a success message
+    console.log(`SUCCESS: Welcome email sent to: ${userEmail}`);
     return {
       statusCode: 200,
       body: JSON.stringify({ message: "Welcome email sent successfully." }),
     };
 
   } catch (error) {
-    // 5. Handle any errors
-    console.error("Error sending welcome email:", error);
+    // 4. Handle any errors
+    console.error("FAILURE: Error during email send:", error);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: error.message }),
