@@ -646,34 +646,50 @@
                 button.textContent = 'Submitting...';
                 button.classList.add('opacity-75', 'cursor-not-allowed');
 
-                // Send form data to Netlify Forms
                 try {
                     const formData = new FormData(form);
                     
-                    // CRITICAL: Submit to the current page URL to ensure Netlify captures it
-                    const response = await fetch(window.location.pathname, {
+                    // Step 1: Submit to Netlify Forms (for record keeping)
+                    const netlifySubmit = fetch(window.location.pathname, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                         body: new URLSearchParams(formData).toString()
                     });
 
-                    console.log('Form submitted. Response status:', response.status);
-                    
-                    // Netlify returns a redirect (302/200) on successful form submission
-                    if (response.ok || response.status === 302) {
-                        // Success - show success message
-                        console.log('Form submission successful!');
-                        form.classList.add('hidden');
-                        successMessage.classList.remove('hidden');
-                        if(waitlistCard) {
-                            waitlistCard.style.height = `${waitlistCard.offsetHeight}px`;
-                        }
+                    // Step 2: Send welcome email via our function (parallel call for speed)
+                    const emailSend = fetch('/.netlify/functions/send-welcome-email', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            email: email,
+                            role: role
+                        })
+                    });
+
+                    // Wait for both to complete
+                    const [netlifyResponse, emailResponse] = await Promise.all([netlifySubmit, emailSend]);
+
+                    console.log('Form submitted to Netlify:', netlifyResponse.status);
+                    console.log('Email function called:', emailResponse.status);
+
+                    // Check if email was sent successfully
+                    if (emailResponse.ok) {
+                        const emailResult = await emailResponse.json();
+                        console.log('Email sent successfully:', emailResult);
                     } else {
-                        throw new Error(`Form submission failed: ${response.statusText}`);
+                        console.warn('Email sending failed, but form was submitted');
                     }
+
+                    // Show success message regardless (form was submitted)
+                    form.classList.add('hidden');
+                    successMessage.classList.remove('hidden');
+                    if(waitlistCard) {
+                        waitlistCard.style.height = `${waitlistCard.offsetHeight}px`;
+                    }
+
                 } catch (err) {
                     // Handle errors
-                    console.error('Form submission error:', err);
+                    console.error('Submission error:', err);
                     formMessage.textContent = 'An error occurred. Please try again.';
                     formMessage.classList.add('text-red-600');
                     
