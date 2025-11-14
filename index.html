@@ -580,7 +580,13 @@
                 
                 <!-- Form Card -->
                 <div id="waitlist-card" class="w-full bg-white rounded-xl shadow-2xl p-6 sm:p-10 mt-12 text-left">
-                    <form id="waitlist-form" class="space-y-5">
+                    <form id="waitlist-form" name="waitlist" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" class="space-y-5">
+                        <!-- Netlify form: name + hidden form-name so Netlify can parse submissions -->
+                        <input type="hidden" name="form-name" value="waitlist" />
+                        <!-- Honeypot field for bots (Netlify will ignore submissions with this filled) -->
+                        <p class="hidden" aria-hidden="true">
+                            <label>Don\'t fill this out if you\'re human: <input name="bot-field" /></label>
+                        </p>
                         <div>
                             <label for="email" class="block text-sm font-medium text-slate-700">Email Address</label>
                             <input type="email" name="email" id="email" required
@@ -730,7 +736,7 @@
             const waitlistCard = document.getElementById('waitlist-card');
             const successMessage = document.getElementById('success-message');
 
-            form.addEventListener('submit', (e) => {
+            form.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 formMessage.textContent = '';
                 formMessage.className = 'text-sm';
@@ -756,17 +762,29 @@
                 button.textContent = 'Submitting...';
                 button.classList.add('opacity-75', 'cursor-not-allowed');
 
+                // Send form data to Netlify so it registers in the dashboard
+                try {
+                    const formData = new FormData(form);
+                    // Ensure the form-name field is present
+                    if (!formData.get('form-name')) formData.append('form-name', 'waitlist');
+                    await fetch(window.location.pathname, { method: 'POST', body: formData });
+                } catch (err) {
+                    // network errors shouldn't block the UX — log for debugging
+                    console.warn('Netlify form submit failed (will continue UX):', err);
+                }
+
+                // Keep the existing graceful success UI for users
                 setTimeout(() => {
                     form.classList.add('hidden');
                     successMessage.classList.remove('hidden');
                     if(waitlistCard) {
                         waitlistCard.style.height = `${waitlistCard.offsetHeight}px`;
                     }
-                }, 1500);
+                }, 800);
             });
 
             function validateEmail(email) {
-                const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-g]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
                 return re.test(String(email).toLowerCase());
             }
 
