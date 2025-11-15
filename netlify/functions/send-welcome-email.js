@@ -63,18 +63,18 @@ exports.handler = async (event) => {
     const resend = new Resend(apiKey);
     
     await resend.emails.send({
-      from: 'BizGoAI <welcome@bizgoai.com>',
+      from: 'BizgoAI <contact@BizgoAI.com>',
       to: [email],
-      subject: "You're a Founding Member of BizGoAI! 🎉",
+      subject: "Welcome to BizgoAI community! 🎉",
       html: `
         <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
           <h2 style="color: #0b2e7b;">Welcome to the community!</h2>
-          <p>You're officially a <strong>founding member</strong> of the BizGoAI small business community. Thank you for trusting us.</p>
-          <p>We're working hard to build a platform that cuts through the AI noise and delivers real, verified results for business owners like you.</p>
+          <p>Thank you for trusting BizgoAI. You're now a founding member of the BizgoAI small-business community.  the </p>
+          <p>We're working hard to build a platform that cuts through the AI noise and delivers real, verified results for s-biz like you.</p>
           <p>We'll keep you posted on exclusive updates, launch dates, and member perks. You'll be the first to know.</p>
           <br>
           <p>Talk soon,</p>
-          <p>The BizGoAI Team</p>
+          <p>Shani Carmi, Founder BizgoAI</p>
         </div>
       `
     });

@@ -1,0 +1,101 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Build Tailwind CSS",
+			"type": "shell",
+			"command": "npm run build:css",
+			"problemMatcher": []
+		},
+		{
+			"label": "Build Tailwind CSS Direct",
+			"type": "shell",
+			"command": "npx tailwindcss -i ./src/styles/tailwind.css -o ./dist/tailwind.css --minify",
+			"problemMatcher": []
+		},
+		{
+			"label": "Install Tailwind Dependencies",
+			"type": "shell",
+			"command": "npm install",
+			"problemMatcher": []
+		},
+		{
+			"label": "Install Tailwind CLI",
+			"type": "shell",
+			"command": "npm install -D @tailwindcss/cli@next",
+			"problemMatcher": []
+		},
+		{
+			"label": "Build Tailwind CSS Production",
+			"type": "shell",
+			"command": "npx tailwindcss -i ./src/styles/tailwind.css -o ./dist/tailwind.css --minify",
+			"problemMatcher": []
+		},
+		{
+			"label": "Build Tailwind Direct CLI",
+			"type": "shell",
+			"command": ".\\node_modules\\.bin\\tailwindcss.cmd -i ./src/styles/tailwind.css -o ./dist/tailwind.css --minify",
+			"problemMatcher": []
+		},
+		{
+			"label": "Tailwind Build Verbose",
+			"type": "shell",
+			"command": "$env:NODE_OPTIONS='--trace-warnings'; npx @tailwindcss/cli@next -i ./src/styles/tailwind.css -o ./dist/tailwind.css --minify",
+			"problemMatcher": []
+		},
+		{
+			"label": "Tailwind Build Node",
+			"type": "shell",
+			"command": "node ./node_modules/@tailwindcss/cli/dist/index.mjs -i ./src/styles/tailwind.css -o ./dist/tailwind.css --minify",
+			"problemMatcher": []
+		},
+		{
+			"label": "Create Dist and Build",
+			"type": "shell",
+			"command": "New-Item -ItemType Directory -Force -Path ./dist; node ./node_modules/@tailwindcss/cli/dist/index.mjs -i ./src/styles/tailwind.css -o ./dist/tailwind.css --minify 2>&1",
+			"problemMatcher": []
+		},
+		{
+			"label": "Install Vite",
+			"type": "shell",
+			"command": "npm install -D vite @vitejs/plugin-legacy",
+			"problemMatcher": []
+		},
+		{
+			"label": "Build CSS After Config Fix",
+			"type": "shell",
+			"command": "npx @tailwindcss/cli@next -i ./src/styles/tailwind.css -o ./dist/tailwind.css --minify",
+			"problemMatcher": []
+		},
+		{
+			"label": "Switch to Tailwind v3",
+			"type": "shell",
+			"command": "npm uninstall tailwindcss @tailwindcss/cli; npm install -D tailwindcss@3.4.15",
+			"problemMatcher": []
+		},
+		{
+			"label": "Build Tailwind CSS v3",
+			"type": "shell",
+			"command": "npx tailwindcss -i ./src/styles/tailwind.css -o ./dist/tailwind.css --minify",
+			"problemMatcher": []
+		},
+		{
+			"label": "Clean Install and Build",
+			"type": "shell",
+			"command": "Remove-Item -Recurse -Force node_modules; Remove-Item -Force package-lock.json; npm install; npm run build:css",
+			"problemMatcher": []
+		},
+		{
+			"label": "Rebuild CSS Minified",
+			"type": "shell",
+			"command": "npm run build:css",
+			"problemMatcher": []
+		},
+		{
+			"label": "Rebuild CSS with All Styles",
+			"type": "shell",
+			"command": "npm run build:css",
+			"problemMatcher": []
+		}
+	]
+}

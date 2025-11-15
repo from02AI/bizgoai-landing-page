@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BizGoAI - The AI Community for Small Business</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind CSS - Production Build -->
+    <link rel="stylesheet" href="./dist/tailwind.css?v=4">
     <!-- Inter Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,15 +14,149 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Handwriting Font -->
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+</head>
     <style>
         /* Solutions Section Card Hover (Best Practice Modern UI) */
+        /* Simplified hover behaviour: only change background and border color.
+           Remove transforms and shadow changes to avoid layout jumping/flicker. */
         .solution-card {
             position: relative;
-            transition: box-shadow 0.28s cubic-bezier(.4,2,.6,1),
-                        transform 0.28s cubic-bezier(.4,2,.6,1),
-                        border-color 0.28s cubic-bezier(.4,2,.6,1);
+            transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease, opacity 200ms ease;
+            will-change: background-color, border-color, color;
         }
 
+        /* Keep overlay fade simple (opacity only) so the appearance is flat */
+        .solution-card .solution-overlay {
+            pointer-events: none;
+            transition: opacity 200ms ease;
+            background: inherit; /* let the card background show through */
+        }
+
+        /* Hover/focus states: only update colors. No transform/box-shadow changes. */
+        .solution-card:hover,
+        .solution-card:focus-within,
+        .group:hover .solution-card {
+            border-color: #f59e0b; /* amber-500 */
+            background-image: none !important; /* override gradient utility classes */
+            background-color: #f59e0b !important; /* amber-500 */
+            color: #fff !important; /* ensure text contrasts on amber */
+        }
+
+        .solution-card:hover .solution-overlay,
+        .solution-card:focus-within .solution-overlay,
+        .group:hover .solution-card .solution-overlay {
+            opacity: 0; /* fade overlay out smoothly */
+        }
+
+        /* Ensure card content is readable on amber background */
+        .solution-card:hover .relative.z-10 h3,
+        .solution-card:focus-within .relative.z-10 h3,
+        .group:hover .solution-card .relative.z-10 h3 {
+            color: #ffffff !important;
+        }
+        .solution-card:hover .relative.z-10 p,
+        .solution-card:focus-within .relative.z-10 p,
+        .group:hover .solution-card .relative.z-10 p {
+            color: rgba(255,255,255,0.92) !important;
+        }
+        .solution-card:hover .relative.z-10 i,
+        .solution-card:focus-within .relative.z-10 i,
+        .group:hover .solution-card .relative.z-10 i {
+            color: #ffffff !important;
+        }
+
+        /* If icons are implemented as SVGs by lucide, target svg fill/stroke too */
+        .solution-card:hover .relative.z-10 svg,
+        .solution-card:focus-within .relative.z-10 svg,
+        .group:hover .solution-card .relative.z-10 svg {
+            color: #ffffff !important;
+            fill: currentColor;
+            stroke: currentColor;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .hero-bg {
+            background: linear-gradient(120deg, #F9FAFB 60%, #EFF6FF 100%);
+        }
+        
+        /* *
+         * NEW 100% NATURAL WAVE ANIMATION
+         * - Removed conflicting SVG <animate> tags
+         * - Removed "wave-rise" animation
+         * - Simplified to a single, linear "wave-flow"
+         * - Implemented true parallax with different durations
+         * */
+
+        @keyframes wave-flow {
+            0% {
+                transform: translate3d(0, 0, 0);
+            }
+            100% {
+                transform: translate3d(-50%, 0, 0); /* Moves by half its width (which is 100% of screen) */
+            }
+        }
+
+        #problem-section {
+            isolation: isolate;
+        }
+
+        .wave-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .wave {
+            position: absolute;
+            width: 200%;
+            height: 100%;
+            bottom: 0;
+            will-change: transform;
+            backface-visibility: hidden;
+            transform: scaleY(3.5);
+            transform-origin: bottom;
+        }
+        
+        /* Pain point cards styling */
+        .pain-point-card {
+            background: rgba(255,255,255,0.3);
+            border-radius: 1.5rem;
+            padding: 1.2rem 1.3rem 1.5rem 1.3rem;
+            box-shadow: 0 8px 32px 0 rgba(16, 38, 70, 0.10), 0 1.5px 6px 0 rgba(30,41,59,0.06);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            /* Keep card visually pleasing but avoid transforms/will-change to prevent stuck blur bug */
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: border-color 220ms ease;
+        }
+        /* Keep only icon color change on hover — remove overlay/border/heading color changes */
+        .pain-point-card > * { position: relative; z-index: 1; }
+
+        /* Only change the icon background color on hover or keyboard focus */
+        .pain-point-card:hover .pain-point-icon,
+        .pain-point-card:focus-within .pain-point-icon {
+            background-color: #f59e0b; /* amber-500 */
+            transition: background-color 220ms ease;
+        }
+
+        /* Turn all icons amber when hovering/focusing the whole cards area (full-width) */
+        .pain-points-grid:hover .pain-point-icon,
+        .pain-points-grid:focus .pain-point-icon,
+        .pain-points-grid:focus-within .pain-point-icon,
+        .pain-points-area:hover .pain-point-icon,
+        .pain-points-area:focus .pain-point-icon,
+        .pain-points-area:focus-within .pain-point-icon {
+            background-color: #f59e0b; /* amber-500 */
+            transition: background-color 220ms ease;
+        }
 
         /* Make the outer pain-points area span the full viewport width so hovering left/right empty space triggers it */
         .pain-points-area {
@@ -79,45 +213,17 @@
             animation: wave-flow 15s linear infinite;
             opacity: 0.45;
         }
-
-        /* Wave animation keyframes */
-        @keyframes wave-flow {
-            0% {
-                transform: translateX(0);
-            }
-            100% {
-                transform: translateX(-50%);
-            }
-        }
-
-        .wave-container {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 120px;
-            overflow: hidden;
-            z-index: 1;
-        }
     </style>
 </head>
 <body class="bg-white text-slate-900 antialiased">
 
     <!-- Header -->
-    <header class="absolute top-0 left-0 w-full z-10 py-6 px-4 sm:px-6 lg:px-8">
+    <header class="absolute top-0 left-0 w-full z-10 pt-0 pb-2 px-4 sm:px-6 lg:px-8">
         <!-- ... existing header code ... -->
         <nav class="flex items-center justify-between">
             <div class="flex items-center">
-                <div class="flex-shrink-0">
-                    <svg class="h-10 w-10 text-blue-600" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    </div>
-                </div>
-                <div class="ml-3">
-                    <span class="text-2xl font-bold text-slate-900">BizGoAI</span>
+                <div class="flex-shrink-0 flex items-center">
+                    <img src="./BizgoAI.svg" alt="BizGoAI Logo" style="height:100px; width:auto; margin-top:-10px;" />
                 </div>
             </div>
             <div class="hidden sm:block">
@@ -138,15 +244,15 @@
                     <!-- Left Column (Content) -->
                     <div class="lg:col-span-6 flex flex-col justify-center z-10">
                         <h1 class="text-3xl font-bold tracking-tight text-[#0b2e7b] sm:text-4xl md:text-5xl lg:text-6xl">
-                            Stop the AI Overwhelm.
-                            <span class="block text-blue-600">Start Growing Together.</span>
+                            <strong>Stop</strong> the AI Overwhelm.
+                            <span class="block text-blue-600"><strong>Start</strong> Growing Together.</span>
                         </h1>
                         <p class="mt-6 text-base text-slate-700 sm:text-lg lg:text-xl max-w-lg">
-                            BizGoAI is the *only* community for small businesses to find trusted, peer-verified AI tools. No hype. Just real results from peers you can trust.
+                            BizgoAI is the only community for small businesses to find trusted, peer-verified AI tools. No hype. Just real results from peers you can trust.
                         </p>
                         <div class="mt-10">
                             <a href="#signup-form" class="inline-flex items-center justify-center px-8 py-3 border border-transparent rounded-lg shadow-sm text-lg font-medium text-white bg-amber-500 hover:bg-amber-600 sm:w-auto">
-                                Become a Founding Member
+                                Join
                             </a>
                         </div>
                     </div>
@@ -538,13 +644,12 @@
 
     <!-- Footer -->
     <footer class="bg-slate-900 text-slate-400">
-        <!-- ... existing footer code ... -->
         <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row items-center justify-between">
-                <div class="flex items-center space-x-6 mb-6 md:mb-0">
-                    <span class="text-3xl font-bold text-white">
-                        <span class="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">BizGoAI</span>
-                    </span>
+            <div class="flex flex-col items-center justify-center">
+                <span class="text-3xl font-bold text-slate-400">
+                    BizgoAI
+                </span>
+                <div class="flex items-center space-x-6 mt-4">
                     <a href="https://www.linkedin.com" target="_blank" class="text-slate-400 hover:text-white">
                         <span class="sr-only">LinkedIn</span>
                         <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -558,7 +663,9 @@
                         </svg>
                     </a>
                     <a href="mailto:contact@bizgoai.com" class="text-slate-400 hover:text-white flex items-center">
-                        <svg class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                        <svg class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
                         contact@bizgoai.com
                     </a>
                 </div>
