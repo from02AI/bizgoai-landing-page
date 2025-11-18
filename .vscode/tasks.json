@@ -96,6 +96,20 @@
 			"type": "shell",
 			"command": "npm run build:css",
 			"problemMatcher": []
+		},
+		{
+			"label": "Create base64 linkedin",
+			"type": "shell",
+			"command": "$b=[IO.File]::ReadAllBytes('C:\\Users\\DELL\\Desktop\\Landing page\\icons8-linkedin-48.png'); [Convert]::ToBase64String($b) | Out-File -Encoding ascii .\\netlify\\functions\\linkedin.b64.txt",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Create base64 x",
+			"type": "shell",
+			"command": "$b=[IO.File]::ReadAllBytes('C:\\Users\\DELL\\Desktop\\Landing page\\icons8-x-50 (1).png'); [Convert]::ToBase64String($b) | Out-File -Encoding ascii .\\netlify\\functions\\x.b64.txt",
+			"isBackground": false,
+			"problemMatcher": []
 		}
 	]
 }

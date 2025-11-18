@@ -47,7 +47,10 @@ exports.handler = async (event) => {
     }
 
     // Parse request body
-    const { email, role } = JSON.parse(event.body);
+    const parsedBody = JSON.parse(event.body || '{}');
+    const email = parsedBody.email;
+    const role = parsedBody.role;
+    const businessName = parsedBody.businessName;
 
     if (!email) {
       return {
@@ -57,24 +60,47 @@ exports.handler = async (event) => {
       };
     }
 
-    console.log(`Sending welcome email to: ${email} (Role: ${role})`);
+    console.log(`Sending welcome email to: ${email} (Role: ${role || 'unspecified'}) for business: ${businessName}`);
+    const sanitizeForHtml = (value) => String(value || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').trim();
+    const sanitizeForText = (value) => String(value || '').trim();
+    const friendlyName = sanitizeForHtml(businessName) || 'friend';
+    const plainName = sanitizeForText(businessName) || 'friend';
+
+    const greetingLineHtml = `Hey ${friendlyName},`;
+    const greetingLineText = `Hey ${plainName},`;
+    const ctaUrl = 'https://www.bizgoai.com/welcome';
+    const twitterUrl = 'https://twitter.com/bizgoai';
+    const linkedinUrl = 'https://www.linkedin.com/company/bizgoai';
+    const replyToAddress = 'contact@bizgoai.com';
 
     // Initialize Resend and send email
     const resend = new Resend(apiKey);
     
     await resend.emails.send({
-      from: 'BizgoAI <contact@BizgoAI.com>',
+      from: 'BizgoAI <contact@bizgoai.com>',
+      reply_to: replyToAddress,
       to: [email],
       subject: "Welcome to BizgoAI community! 🎉",
+      text: `${greetingLineText}\n\nThank you for trusting BizgoAI. You're now a founding member of the BizgoAI small-business community.\n\nWe're working hard to build a platform that cuts through the AI noise and delivers real, verified results for small businesses like yours.\n\nWe'll keep you posted on exclusive updates, launch dates, and member perks. You'll be the first to know.\n\nTalk soon,\nShani Carmi, Founder BizgoAI`,
       html: `
-        <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-          <h2 style="color: #0b2e7b;">Welcome to the community!</h2>
-          <p>Thank you for trusting BizgoAI. You're now a founding member of the BizgoAI small-business community.  the </p>
-          <p>We're working hard to build a platform that cuts through the AI noise and delivers real, verified results for s-biz like you.</p>
-          <p>We'll keep you posted on exclusive updates, launch dates, and member perks. You'll be the first to know.</p>
-          <br>
-          <p>Talk soon,</p>
-          <p>Shani Carmi, Founder BizgoAI</p>
+        <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #1e1e1e; max-width:600px; margin:0 auto; padding:24px;">
+          <p style="margin:0 0 12px;font-size:18px;font-weight:600;">${greetingLineHtml}</p>
+          <p style="margin:0 0 12px;font-size:16px;">Thank you for trusting BizgoAI. You're now a founding member of the BizgoAI small-business community.</p>
+          <p style="margin:0 0 12px;font-size:16px;">We're working hard to build a platform that cuts through the AI noise and delivers real, verified results for small businesses like yours.</p>
+          <p style="margin:0 0 18px;font-size:16px;">We'll keep you posted on exclusive updates, launch dates, and member perks. You'll be the first to know.</p>
+          <p style="margin:0 0 8px;font-size:16px;">Talk soon,</p>
+          <p style="margin:0;font-size:16px;">Shani Carmi, Founder BizgoAI</p>
+          <p style="margin:0 0 0 0;font-size:16px;"><a href="https://www.BizgoAI.com" style="color:#0a66c2;text-decoration:underline;">www.BizgoAI.com</a></p>
+          <div style="margin-top:16px;display:flex;gap:12px;">
+            <a href="${twitterUrl}" target="_blank" rel="noreferrer" style="display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;text-decoration:none;">
+              <span style="position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);">Twitter</span>
+              <img src="https://iili.io/fHXqKdl.png" alt="X" width="28" height="28" style="display:block;border:0;" />
+            </a>
+            <a href="${linkedinUrl}" target="_blank" rel="noreferrer" style="display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;text-decoration:none;">
+              <span style="position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);">LinkedIn</span>
+              <img src="https://iili.io/fHXqf72.png" alt="LinkedIn" width="28" height="28" style="display:block;border:0;" />
+            </a>
+          </div>
         </div>
       `
     });
