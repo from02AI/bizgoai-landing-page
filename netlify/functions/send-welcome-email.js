@@ -69,7 +69,7 @@ exports.handler = async (event) => {
     const greetingLineHtml = `Hey ${friendlyName},`;
     const greetingLineText = `Hey ${plainName},`;
     const ctaUrl = 'https://www.bizgoai.com/welcome';
-    const twitterUrl = 'https://twitter.com/bizgoai';
+    const twitterUrl = 'https://x.com/BizgoAI';
     const linkedinUrl = 'https://www.linkedin.com/company/bizgoai';
     const replyToAddress = 'contact@bizgoai.com';
 
@@ -91,15 +91,11 @@ exports.handler = async (event) => {
           <p style="margin:0 0 8px;font-size:16px;">Talk soon,</p>
           <p style="margin:0;font-size:16px;">Shani Carmi, Founder BizgoAI</p>
           <p style="margin:0 0 0 0;font-size:16px;"><a href="https://www.BizgoAI.com" style="color:#0a66c2;text-decoration:underline;">www.BizgoAI.com</a></p>
-          <div style="margin-top:16px;display:flex;gap:12px;">
-            <a href="${twitterUrl}" target="_blank" rel="noreferrer" style="display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;text-decoration:none;">
-              <span style="position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);">Twitter</span>
-              <img src="https://iili.io/fHXqKdl.png" alt="X" width="28" height="28" style="display:block;border:0;" />
-            </a>
-            <a href="${linkedinUrl}" target="_blank" rel="noreferrer" style="display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;text-decoration:none;">
-              <span style="position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);">LinkedIn</span>
-              <img src="https://iili.io/fHXqf72.png" alt="LinkedIn" width="28" height="28" style="display:block;border:0;" />
-            </a>
+          <div style="margin-top:16px;font-size:16px;">
+            Follow us on social accounts:<br />
+            <a href="${linkedinUrl}" target="_blank" rel="noreferrer" style="color:#0a66c2;text-decoration:underline;">Linkedin</a>
+            &nbsp;|&nbsp;
+            <a href="${twitterUrl}" target="_blank" rel="noreferrer" style="color:#0a66c2;text-decoration:underline;">Twitter / X</a>
           </div>
         </div>
       `
