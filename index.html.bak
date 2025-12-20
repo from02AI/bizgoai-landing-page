@@ -108,7 +108,6 @@ header.scrolled {
         grid-row: 1 / 2;
         justify-self: start;
         margin-left: 0;
-            margin-top: 2rem;
     }
     #why-join-section .why-join-urgency {
         grid-column: 2 / 3;
@@ -121,8 +120,6 @@ header.scrolled {
 }
 @media (max-width: 1023px) {
     .why-join-header { padding-top: 0.5rem; }
-    /* Reduce vertical space between heading and benefits card on mobile */
-    #why-join-section .benefits-list { margin-top: 0.75rem; }
 }
 
 /* === HERO TESTIMONIAL CARDS === */
@@ -226,25 +223,25 @@ header.scrolled {
             }
             /* Add breathing room below the rounded card so the urgency badge sits outside it */
             #why-join-section .benefits-list {
-                margin-bottom: 0.75rem;
+                margin-bottom: 0.75rem !important;
                 z-index: 2;
             }
             #why-join-section .why-join-urgency {
-                margin-top: 0.5rem;
+                margin-top: 0.5rem !important;
                 z-index: 3;
             }
             /* Default: keep urgency centered on mobile */
-            #why-join-section .why-join-urgency { margin-left: 3rem; }
+            #why-join-section .why-join-urgency { margin-left: 3rem !important; }
 
             /* Desktop: nudge urgency slightly to the right so it lines up with card inner padding */
             @media (min-width: 1024px) {
-                #why-join-section .why-join-urgency { margin-left: 7rem; display: block; }
+                #why-join-section .why-join-urgency { margin-left: 7rem !important; display: block; }
             }
                 /* Mobile & Tablet: center the right column and urgency badge */
                 @media (max-width: 1023px) {
-                    #why-join-section .why-join-right { align-items: center; }
-                    #why-join-section .benefits-list { margin-left: auto; margin-right: auto; }
-                    #why-join-section .why-join-urgency { margin-left: auto; margin-right: auto; width: auto; justify-self: center; }
+                    #why-join-section .why-join-right { align-items: center !important; }
+                    #why-join-section .benefits-list { margin-left: auto !important; margin-right: auto !important; }
+                    #why-join-section .why-join-urgency { margin-left: auto !important; margin-right: auto !important; width: auto !important; justify-self: center !important; }
                 }
 .pain-point-card {
     /* Multi-layer background for depth */
@@ -1927,18 +1924,17 @@ footer a:hover {
 
             /* Benefits panel: compact, modern, not “row cards” */
             #why-join-section .benefits-list {
-                display: flex;
-                flex-direction: column;
-                gap: 0;
-                padding: 1.25rem 1.5rem;
-                margin-top: 1.5rem;
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 0 !important;
+                padding: 1.25rem 1.5rem !important;
                 box-shadow: 0 16px 50px rgba(11, 46, 123, 0.10) !important;
                 border-radius: 18px !important;
             }
 
             #why-join-section .benefit-item {
                 margin: 0 !important;
-                padding: 0.25rem 0;
+                padding: 0.75rem 0 !important;
                 border-radius: 0 !important;
                 background: transparent !important;
                 border-top: 1px solid rgba(15, 23, 42, 0.08);

@@ -110,6 +110,13 @@
 			"command": "$b=[IO.File]::ReadAllBytes('C:\\Users\\DELL\\Desktop\\Landing page\\icons8-x-50 (1).png'); [Convert]::ToBase64String($b) | Out-File -Encoding ascii .\\netlify\\functions\\x.b64.txt",
 			"isBackground": false,
 			"problemMatcher": []
+		},
+		{
+			"label": "Preview Local Server (no-cache)",
+			"type": "shell",
+			"command": "npx http-server -p 8080 -c-1",
+			"isBackground": true,
+			"problemMatcher": []
 		}
 	]
 }

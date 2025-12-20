@@ -7,7 +7,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:css": "tailwindcss -i ./src/styles/tailwind.css -o ./dist/tailwind.css --minify",
     "watch:css": "tailwindcss -i ./src/styles/tailwind.css -o ./dist/tailwind.css --watch",
-    "dev": "npm run watch:css"
+    "dev": "npm run watch:css",
+    "netlify:dev": "netlify dev",
+    "netlify:live": "netlify dev --live",
+    "netlify:live:site": "netlify dev --live --site 3c70a507-98c9-49ba-9725-07dfad237f0f"
   },
   "author": "",
   "license": "ISC",
