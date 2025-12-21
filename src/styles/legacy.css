@@ -1957,4 +1957,34 @@ footer a:hover {
                 line-height: 1.4 !important;
             }
         }
+
+/* Increase signup form headline size on small screens for better readability */
+@media (max-width: 640px) {
+    #form-headline {
+        font-size: 2.25rem !important; /* ~36px */
+        line-height: 1.05 !important;
+    }
+}
+
+    /* --- Solutions grid authoritative fixes ---
+       Ensure the solutions grid uses equal row heights and cards fill their cells.
+       This overrides any earlier staggered margins or transforms that may affect alignment.
+    */
+    .solutions-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        grid-auto-rows: minmax(0, 1fr) !important;
+        align-items: stretch !important;
+        gap: 1rem !important;
+    }
+    .solutions-grid .solution-card {
+        display: flex !important;
+        flex-direction: column !important;
+        height: 100% !important;
+        margin-top: 0 !important;
+    }
+    .solutions-grid .solution-card:nth-child(even) {
+        margin-top: 0 !important;
+    }
+
     
