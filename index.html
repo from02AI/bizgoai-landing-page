@@ -1,8 +1,17 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Safety stubs: ensure rotation hooks exist even if slider script errors -->
+    <script>
+        (function(){
+            try {
+                if (!window.rotateSlides) window.rotateSlides = function(){ console.warn('rotateSlides stub called'); };
+                if (!window.setQuoteAutoRotate) window.setQuoteAutoRotate = function(v){ console.warn('setQuoteAutoRotate stub called', !!v); };
+            } catch (e) { /* ignore */ }
+        })();
+    </script>
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://bizgoai.com/">
@@ -787,7 +796,8 @@ We respect your privacy and will never sell your data.
                     Join the waitlist. We'll be in touch.
                 </p>
                 <a href="#signup-form"
-                    class="mt-6 sm:mt-8 w-full inline-flex items-center justify-center px-6 py-3 border border-slate-300 rounded-lg shadow-sm text-base font-medium text-slate-700 bg-slate-50 hover:bg-slate-100 sm:w-auto transition-colors">
+                    class="mt-6 sm:mt-8 w-full inline-flex items-center justify-center px-6 py-3 rounded-lg shadow-sm text-base font-medium text-white sm:w-auto transition-transform duration-200"
+                    style="background: linear-gradient(180deg, #2563eb 0%, #0b2e7b 100%); border: 1px solid rgba(255,255,255,0.06);">
                     Join as a Vendor
                 </a>
             </div>
@@ -802,7 +812,7 @@ We respect your privacy and will never sell your data.
                 <span class="text-2xl sm:text-3xl font-bold text-slate-400">
                     BizgoAI
                 </span>
-                <div class="flex flex-col sm:flex-row items-center sm:space-x-6 space-y-3 sm:space-y-0 mt-4">
+                <div class="flex flex-row items-center space-x-6 mt-4 contact-row">
                     <div class="flex items-center space-x-6">
                         <a href="https://www.linkedin.com/company/bizgoai" target="_blank" class="text-slate-400 hover:text-white transition-colors">
                             <span class="sr-only">LinkedIn</span>
@@ -810,12 +820,7 @@ We respect your privacy and will never sell your data.
                                 <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
                             </svg>
                         </a>
-                        <a href="https://x.com/BizgoAI" target="_blank" class="text-slate-400 hover:text-white transition-colors">
-                            <span class="sr-only">X (formerly Twitter)</span>
-                            <span class="inline-flex items-center justify-center bg-slate-400 rounded-md border border-slate-400" style="padding: 2px; border-width:1px;">
-                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAAC+klEQVR4nO2ZSWhUQRCGP424K24J7oiCOyoeBAUVPAQEEQlxuehBD4ogBD3pyZjcNOjJmwt6EEXwIgriRUGiYkxEQVDcUC+iMZt7kpaCP9CMSd6bl2ReT5wfipmp6aqpf17339XvQQEFFNAXlADVQD3QBrgcWxvwGKhSLYmwFWhJoXjXg1kt5UlIdAZQvMuwzmzIlAR2JVyGNQPFcYhUB1Csi7BjcYg0BFCoizATgEi0BlCoizCb+pFweWKR+K+IVETkOJdFQV+A+Yo7kGsiP4FlveQYC7yIkec3sEExG4E/aUytZ8BIYAhww/NvV541QHvE5rZLY5cATWmukeOKmQ58lu8rMFv+qhh7wTTgXVprxMk6vKmxxfPfAYYCw4D73cRd0ZUcBTxIQML1NxGzD8AkxZ71/Aflm5exNz0ERovotYQk3EAQMbuq2DHeIjdBWC7/PvneeO14TR9IuIEiYrZT8as99XkqQTBcABbp/d4+knADScRUZ45yHPX8JzPyl2Ypsy7XRMzuAkVa5LWezFrxhvEJZNalQcTssPLM9c41H4HJ8p/OFyJ/gFXKtcfzm0IhxXqeD0ScCrWCDZc9/275VgK/8oHIW09mp2hqOe0ntq8YjoROpBlYqlwT9Vrq3cyolRgUSRyCJNIObFKedcB7YKo+n/LGmTwbZgGNIRLZrxwLvQJvqq8aATzxBME2TtQBB0WkRvEmsy8zvrOdvKtd/yHfK2Cc/JdCIXJdc97akXvdfP8NWKD8hzz/GfkmJGjlI5EtiTo1izZ9LvYy7hEwXF3vbc+/zVtTHWkRMVmdGeMQ1WU2xjDDO4g1atEbTqRBxPaEFYrZEfNesf3j6xVT5vlveYLQkEsiJrObNX6tzh5x/4DXah57wmLge66I2G2brsbwU4J1dT6ihopcr5E0LRKDhkhLAEW6GP1cJOoDKNT1x2OFOPtB2lY5GB69NemMEwvlAT8MLYtLwifTHNiVKCMhinWzuS6lR3Kt+u3KbKZTAQUUwD/4C68XAvRNax0sAAAAAElFTkSuQmCC" alt="X (formerly Twitter)" class="h-7 w-7" />
-                            </span>
-                        </a>
+                        <!-- X icon removed as requested -->
                     </div>
                     <a href="mailto:contact@bizgoai.com" class="text-slate-400 hover:text-white flex items-center transition-colors text-sm sm:text-base">
                         <svg class="h-5 w-5 sm:h-6 sm:w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -863,23 +868,32 @@ We respect your privacy and will never sell your data.
             
             // Quote Slider Auto-Rotation
             (function() {
+                try { console.info('Quote Slider init - loading script'); } catch (e) {}
                 const slides = document.querySelectorAll('.quote-slide');
                 if (slides.length === 0) return;
-                
+
                 let currentSlide = 0;
-                
+                // Defensive flag to ensure no automatic rotation runs unless explicitly enabled
+                let autoRotate = false;
+
                 function rotateSlides() {
+                    // Prevent accidental calls if auto-rotation is disabled
+                    if (!autoRotate) {
+                        try { console.info('rotateSlides called but autoRotate=false'); } catch (e) {}
+                        return;
+                    }
+
                     // Remove active and add exit to current slide
                     slides[currentSlide].classList.remove('active');
                     slides[currentSlide].classList.add('exit');
-                    
+
                     // Move to next slide
                     currentSlide = (currentSlide + 1) % slides.length;
-                    
+
                     // Add active to new slide
                     slides[currentSlide].classList.add('active');
                     slides[currentSlide].classList.remove('exit');
-                    
+
                     // Clean up exit class after transition
                     setTimeout(() => {
                         slides.forEach(slide => {
@@ -889,9 +903,25 @@ We respect your privacy and will never sell your data.
                         });
                     }, 600);
                 }
-                
-                // Rotate every 4 seconds
-                setInterval(rotateSlides, 3300);
+
+                // Auto-rotation intentionally disabled. If you need to enable it at runtime,
+                // call `window.setQuoteAutoRotate(true)` from the console.
+                try { window.rotateSlides = rotateSlides; } catch (e) { /* no-op */ }
+                try { window.setQuoteAutoRotate = function(v) { autoRotate = !!v; console.info('Quote Slider autoRotate set to', !!v); }; } catch (e) {}
+
+                // For debugging: log any class changes to slides (helps identify external toggles)
+                try {
+                    slides.forEach((s, i) => {
+                        const obs = new MutationObserver(muts => {
+                            muts.forEach(m => {
+                                if (m.attributeName === 'class') {
+                                    console.debug('slide', i, 'class now:', s.className);
+                                }
+                            });
+                        });
+                        obs.observe(s, { attributes: true, attributeFilter: ['class'] });
+                    });
+                } catch (e) {}
             })();
             
             // Initialize Lucide icons
@@ -992,23 +1022,21 @@ We respect your privacy and will never sell your data.
                 // Wire buttons: keep manual controls intuitive (next = forward, prev = backward)
                 nextBtn.addEventListener('click', () => {
                     stepForward();
-                    stopAutoPlay();
-                    startAutoPlay();
+                    stopAutoPlay(); // Do not restart autoplay
                 });
 
                 prevBtn.addEventListener('click', () => {
                     stepBackward();
-                    stopAutoPlay();
-                    startAutoPlay();
+                    stopAutoPlay(); // Do not restart autoplay
                 });
 
                 // Pause on hover/focus
                 const sliderWrapper = document.querySelector('.stats-slider-wrapper');
                 if (sliderWrapper) {
                     sliderWrapper.addEventListener('mouseenter', stopAutoPlay);
-                    sliderWrapper.addEventListener('mouseleave', startAutoPlay);
+                    // Do not restart autoplay on mouseleave
                     sliderWrapper.addEventListener('focusin', stopAutoPlay);
-                    sliderWrapper.addEventListener('focusout', startAutoPlay);
+                    // Do not restart autoplay on focusout
                 }
 
                 // Resize handling
@@ -1026,7 +1054,13 @@ We respect your privacy and will never sell your data.
                 cardWidth = getCardWidth();
                 // Position slider to the middle copy so backward/forward stepping is seamless
                 setTranslate(currentIndex, false);
-                startAutoPlay();
+                // Auto-play disabled by default. To enable at runtime call `window.startStatsAutoPlay()`
+                // startAutoPlay();
+
+                // Expose controls for manual testing in the console
+                try { window.startStatsAutoPlay = startAutoPlay; window.stopStatsAutoPlay = stopAutoPlay; } catch (e) {}
+                // Ensure autoplay is stopped initially
+                stopAutoPlay();
             })();
             
             // Mobile: Scroll progress indicator
@@ -1261,6 +1295,8 @@ We respect your privacy and will never sell your data.
         });
     </script>
 
+    <!-- External stubs to ensure slider hooks are present (avoids CSP blocking) -->
+    <script src="/stubs.js"></script>
     <script>
         // Persona table interactions: click/keyboard support
         (function(){

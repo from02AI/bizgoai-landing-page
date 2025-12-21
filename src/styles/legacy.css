@@ -861,6 +861,11 @@ footer a:hover {
             opacity: 1 !important;
         }
         .rail-inner { display:flex; flex-direction:column; align-items:center; gap:6px; width:100%; text-align:center; }
+
+        /* Desktop-only: left-align the left rail content (not centered) */
+        @media (min-width: 1024px) {
+            .comparison-table .rail-inner { align-items: flex-start; text-align: left; }
+        }
         .rail-icon { opacity: 0.95; }
         .rail-label { font-weight:800; font-size:1.3rem; line-height:1; }
         .rail-position { font-size:0.95rem; color: rgba(255,255,255,0.92); margin-top:8px; line-height:1.35; }
@@ -897,6 +902,14 @@ footer a:hover {
             .row-content { border-radius:12px; }
             .inner-cards { flex-direction:column; }
             .row-action { justify-content:flex-start; }
+        }
+
+        /* Footer contact: ensure icon + email align perfectly on small screens */
+        @media (max-width: 640px) {
+            footer .contact-row { align-items: center; display: flex; gap: 0.75rem; }
+            footer .contact-row a { display: inline-flex; align-items: center; gap: 0.5rem; line-height: 1; }
+            footer .contact-row svg, footer .contact-row img { display: inline-block; vertical-align: middle; }
+            footer .contact-row .h-7 { height: 1.25rem; width: 1.25rem; }
         }
 
         body {
